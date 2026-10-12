@@ -79,6 +79,10 @@
         --svg-ground:    #26312F;
         --svg-tree:      #4C7F78;
         --svg-sky:       #1A2523;
+
+        --c-price:       #E4C78F;
+        --c-error:       #E58A74;
+        --c-footer:      #0D1413;
       }
     }
 
@@ -166,7 +170,7 @@
        4. HEADER STICKY
        ========================================================= */
     .site-header {
-      position: sticky; top: 0; z-index: 100;
+      position: sticky; top: env(safe-area-inset-top, 0px); z-index: 100;
       background: color-mix(in srgb, var(--c-bg) 82%, transparent);
       backdrop-filter: saturate(1.4) blur(12px);
       -webkit-backdrop-filter: saturate(1.4) blur(12px);
@@ -343,8 +347,7 @@
     .card-features li { display: flex; align-items: center; gap: 6px; }
     .card-features svg { width: 16px; height: 16px; color: var(--c-accent); }
     .card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
-    .card-price { font-family: var(--f-serif); font-size: 1.7rem; font-weight: 700; color: var(--c-primary); font-variant-numeric: lining-nums; }
-    @media (prefers-color-scheme: dark) { .card-price { color: var(--c-accent-2); } }
+    .card-price { font-family: var(--f-serif); font-size: 1.7rem; font-weight: 700; color: var(--c-price); font-variant-numeric: lining-nums; }
     .card-link {
       width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
       border: 1px solid var(--c-line); color: var(--c-ink); transition: background .25s, color .25s, border-color .25s;
@@ -436,9 +439,8 @@
     textarea { min-height: 150px; resize: vertical; }
     input::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--c-ink-soft) 70%, transparent); }
     input:focus, textarea:focus { outline: none; border-color: var(--c-accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-accent) 20%, transparent); background: var(--c-surface); }
-    .field.has-error input, .field.has-error textarea { border-color: #C2553F; }
-    .error-msg { display: none; color: #C2553F; font-size: .82rem; margin-top: 6px; }
-    @media (prefers-color-scheme: dark) { .error-msg { color: #E58A74; } .field.has-error input, .field.has-error textarea { border-color: #E58A74; } }
+    .field.has-error input, .field.has-error textarea { border-color: var(--c-error); }
+    .error-msg { display: none; color: var(--c-error); font-size: .82rem; margin-top: 6px; }
     .field.has-error .error-msg { display: block; }
     .form-note { font-size: .8rem; color: var(--c-ink-soft); margin: 14px 0 0; }
     .form-card form .btn { width: 100%; }
@@ -468,8 +470,7 @@
     /* =========================================================
        11. FOOTER
        ========================================================= */
-    .site-footer { background: var(--c-primary); color: color-mix(in srgb, var(--c-on-primary) 80%, transparent); padding: clamp(56px, 7vw, 80px) 0 28px; font-size: .92rem; }
-    @media (prefers-color-scheme: dark) { .site-footer { background: #0D1413; } }
+    .site-footer { background: var(--c-footer); color: color-mix(in srgb, var(--c-on-primary) 80%, transparent); padding: clamp(56px, 7vw, 80px) 0 28px; font-size: .92rem; }
     .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 36px; padding-bottom: 44px; border-bottom: 1px solid rgba(246, 240, 230, .14); }
     .site-footer .logo-text { color: var(--c-on-primary); }
     .site-footer h4 { font-family: var(--f-sans); font-size: .76rem; letter-spacing: .18em; text-transform: uppercase; color: var(--c-accent-2); margin: 0 0 16px; font-weight: 600; }
