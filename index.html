@@ -11,7 +11,7 @@
        ========================================================= -->
   <title>Maison Aurore — Agence immobilière</title>
   <meta name="description" content="Agence immobilière indépendante : estimation, vente et recherche de biens d'exception. Un accompagnement sur-mesure, de la première visite à la signature.">
-  <meta name="theme-color" content="#1F3D3A">
+  <meta name="theme-color" content="#17181C">
 
   <!-- Polices : Cormorant Garamond (titres, serif) + Inter (texte courant, sans-serif) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,28 +23,32 @@
        1. DESIGN TOKENS — palette, typo, espacements
        ========================================================= */
     :root {
-      /* Palette claire : vert pétrole + bronze sur fond sable */
-      --c-bg:          #F6F0E6;   /* sable / crème */
-      --c-bg-alt:      #EDE4D5;   /* sable plus soutenu (bandes) */
-      --c-surface:     #FFFDF8;   /* cartes */
-      --c-ink:         #1C2B29;   /* texte principal */
-      --c-ink-soft:    #4A5957;   /* texte secondaire */
-      --c-primary:     #1F3D3A;   /* vert pétrole profond */
-      --c-primary-2:   #2C5450;   /* vert pétrole clair */
-      --c-on-primary:  #F6F0E6;
-      --c-accent:      #B08646;   /* bronze / doré */
-      --c-accent-2:    #D2AE6E;   /* doré clair */
-      --c-line:        rgba(31, 61, 58, .14);
-      --c-shadow:      rgba(31, 41, 38, .12);
+      /* Palette claire : anthracite graphite + doré champagne sur blanc cassé */
+      --c-bg:          #F4F3F0;   /* blanc cassé */
+      --c-bg-alt:      #EAE8E3;   /* gris chaud (bandes) */
+      --c-surface:     #FFFFFF;   /* cartes */
+      --c-ink:         #1E1F24;   /* texte principal */
+      --c-ink-soft:    #5A5B63;   /* texte secondaire */
+      --c-primary:     #17181C;   /* anthracite */
+      --c-primary-2:   #2C2E35;   /* graphite */
+      --c-on-primary:  #F4F3F0;
+      --c-accent:      #A88349;   /* doré foncé (lisible sur fond clair) */
+      --c-accent-2:    #C9A46A;   /* doré champagne */
+      --c-line:        rgba(23, 24, 28, .12);
+      --c-shadow:      rgba(23, 24, 28, .14);
 
-      /* Couleurs des illustrations SVG */
-      --svg-wall:      #EADFC9;
-      --svg-wall-2:    #DCCDB1;
-      --svg-roof:      #1F3D3A;
-      --svg-window:    #F3D9A0;
-      --svg-ground:    #CFC0A2;
-      --svg-tree:      #2C5450;
-      --svg-sky:       #F1E6D2;
+      /* Couleurs des illustrations SVG (secours si une photo ne charge pas) */
+      --svg-wall:      #E6E2DA;
+      --svg-wall-2:    #D6D0C5;
+      --svg-roof:      #17181C;
+      --svg-window:    #E9CF9C;
+      --svg-ground:    #D9D4CA;
+      --svg-tree:      #7C8077;
+      --svg-sky:       #ECEAE5;
+
+      --c-price:       #17181C;   /* prix des biens */
+      --c-error:       #C2553F;   /* erreurs de formulaire */
+      --c-footer:      #17181C;   /* fond du footer */
 
       --f-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       --f-sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -59,30 +63,30 @@
     /* Mode sombre automatique selon les préférences système */
     @media (prefers-color-scheme: dark) {
       :root {
-        --c-bg:          #121A19;
-        --c-bg-alt:      #18231F;
-        --c-surface:     #1C2826;
-        --c-ink:         #EFE7DA;
-        --c-ink-soft:    #B5ADA0;
-        --c-primary:     #2F5C57;
-        --c-primary-2:   #3C716B;
-        --c-on-primary:  #F6F0E6;
-        --c-accent:      #D2AE6E;
-        --c-accent-2:    #E4C78F;
-        --c-line:        rgba(239, 231, 218, .12);
-        --c-shadow:      rgba(0, 0, 0, .4);
+        --c-bg:          #111215;
+        --c-bg-alt:      #17181C;
+        --c-surface:     #1E2026;
+        --c-ink:         #EEECE8;
+        --c-ink-soft:    #A9A8A4;
+        --c-primary:     #2A2C33;
+        --c-primary-2:   #383B44;
+        --c-on-primary:  #F4F3F0;
+        --c-accent:      #D4B27A;
+        --c-accent-2:    #E3C894;
+        --c-line:        rgba(238, 236, 232, .1);
+        --c-shadow:      rgba(0, 0, 0, .45);
 
-        --svg-wall:      #34413E;
-        --svg-wall-2:    #2A3634;
-        --svg-roof:      #0E1514;
-        --svg-window:    #E8C27A;
-        --svg-ground:    #26312F;
-        --svg-tree:      #4C7F78;
-        --svg-sky:       #1A2523;
+        --svg-wall:      #2C2E35;
+        --svg-wall-2:    #24262C;
+        --svg-roof:      #0B0C0E;
+        --svg-window:    #E3C27E;
+        --svg-ground:    #22242A;
+        --svg-tree:      #4E5560;
+        --svg-sky:       #191B20;
 
-        --c-price:       #E4C78F;
+        --c-price:       #E3C894;
         --c-error:       #E58A74;
-        --c-footer:      #0D1413;
+        --c-footer:      #0B0C0E;
       }
     }
 
@@ -254,6 +258,15 @@
       aspect-ratio: 5 / 4.4;
     }
     .hero-art svg.scene { width: 100%; height: 100%; }
+    /* Photos : posées au-dessus des illustrations SVG, qui servent de secours */
+    .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-art .frame .photo { animation: kenburns 20s ease-in-out infinite alternate; transform-origin: 60% 40%; }
+    .hero-art .frame::after { /* léger voile pour fondre la photo dans la palette */
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(180deg, transparent 55%, rgba(23, 24, 28, .35));
+    }
+    .hero-art .frame { animation: float 7s ease-in-out infinite; }
+    @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.09); } }
     .float { animation: float 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
     .float-slow { animation: float 9s ease-in-out infinite; transform-box: fill-box; }
     .drift { animation: drift 40s linear infinite; }
@@ -331,7 +344,8 @@
     .card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -30px var(--c-shadow); }
     .card-visual { position: relative; aspect-ratio: 4 / 3; background: var(--svg-sky); overflow: hidden; }
     .card-visual svg { width: 100%; height: 100%; transition: transform .7s var(--ease); }
-    .card:hover .card-visual svg { transform: scale(1.04); }
+    .card-visual .photo { transition: transform .7s var(--ease); }
+    .card:hover .card-visual svg, .card:hover .card-visual .photo { transform: scale(1.05); }
     .card-tag {
       position: absolute; top: 14px; left: 14px; z-index: 1;
       background: var(--c-surface); color: var(--c-ink); font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
@@ -730,6 +744,7 @@
                 <text x="386" y="333" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#fff">VENDU</text>
               </g>
             </svg>
+            <img class="photo" src="__IMG_hero__" alt="Maison contemporaine aux grandes baies vitrées, éclairée au crépuscule" width="1200" height="1056" fetchpriority="high" onerror="this.remove()">
           </div>
 
           <div class="hero-badge hero-badge--a">
@@ -814,6 +829,7 @@
                 <rect x="337" y="214" width="5" height="50" fill="var(--svg-roof)"/>
                 <circle cx="340" cy="204" r="20" fill="var(--svg-tree)" opacity=".85"/>
               </svg>
+              <img class="photo" src="__IMG_appart__" alt="Séjour lumineux d'un appartement ancien avec parquet et moulures" width="800" height="600" loading="lazy" onerror="this.remove()">
             </div>
             <div class="card-body">
               <span class="card-type">Appartement</span>
@@ -867,6 +883,7 @@
                 <ellipse cx="40" cy="236" rx="18" ry="28" fill="var(--svg-tree)"/>
                 <ellipse cx="364" cy="226" rx="14" ry="34" fill="var(--svg-tree)" opacity=".85"/>
               </svg>
+              <img class="photo" src="__IMG_villa__" alt="Villa contemporaine avec piscine" width="800" height="600" loading="lazy" onerror="this.remove()">
             </div>
             <div class="card-body">
               <span class="card-type">Maison</span>
@@ -927,6 +944,7 @@
                 <ellipse cx="370" cy="234" rx="24" ry="16" fill="var(--svg-tree)"/>
                 <path d="M30 248h340" stroke="var(--c-accent)" stroke-width="2" stroke-dasharray="4 8" opacity=".6"/>
               </svg>
+              <img class="photo" src="__IMG_longere__" alt="Maison en pierre entourée de verdure" width="800" height="600" loading="lazy" onerror="this.remove()">
             </div>
             <div class="card-body">
               <span class="card-type">Maison de campagne</span>
