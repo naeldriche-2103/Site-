@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- =========================================================
+       NOM DE L'AGENCE : [À REMPLACER]
+       → Modifiez la constante AGENCY_NAME dans le <script> en bas
+         de page : tous les éléments [data-agency] seront mis à jour.
+         Pensez aussi à adapter <title> et la meta description.
+       ========================================================= -->
+  <title>Maison Aurore — Agence immobilière</title>
+  <meta name="description" content="Agence immobilière indépendante : estimation, vente et recherche de biens d'exception. Un accompagnement sur-mesure, de la première visite à la signature.">
+  <meta name="theme-color" content="#1F3D3A">
+
+  <!-- Polices : Cormorant Garamond (titres, serif) + Inter (texte courant, sans-serif) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       1. DESIGN TOKENS — palette, typo, espacements
+       ========================================================= */
+    :root {
+      /* Palette claire : vert pétrole + bronze sur fond sable */
+      --c-bg:          #F6F0E6;   /* sable / crème */
+      --c-bg-alt:      #EDE4D5;   /* sable plus soutenu (bandes) */
+      --c-surface:     #FFFDF8;   /* cartes */
+      --c-ink:         #1C2B29;   /* texte principal */
+      --c-ink-soft:    #4A5957;   /* texte secondaire */
+      --c-primary:     #1F3D3A;   /* vert pétrole profond */
+      --c-primary-2:   #2C5450;   /* vert pétrole clair */
+      --c-on-primary:  #F6F0E6;
+      --c-accent:      #B08646;   /* bronze / doré */
+      --c-accent-2:    #D2AE6E;   /* doré clair */
+      --c-line:        rgba(31, 61, 58, .14);
+      --c-shadow:      rgba(31, 41, 38, .12);
+
+      /* Couleurs des illustrations SVG */
+      --svg-wall:      #EADFC9;
+      --svg-wall-2:    #DCCDB1;
+      --svg-roof:      #1F3D3A;
+      --svg-window:    #F3D9A0;
+      --svg-ground:    #CFC0A2;
+      --svg-tree:      #2C5450;
+      --svg-sky:       #F1E6D2;
+
+      --f-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      --f-sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+      --radius:    18px;
+      --radius-sm: 10px;
+      --container: 1180px;
+      --gutter:    clamp(16px, 4vw, 40px);
+      --ease:      cubic-bezier(.22, .61, .36, 1);
+    }
+
+    /* Mode sombre automatique selon les préférences système */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --c-bg:          #121A19;
+        --c-bg-alt:      #18231F;
+        --c-surface:     #1C2826;
+        --c-ink:         #EFE7DA;
+        --c-ink-soft:    #B5ADA0;
+        --c-primary:     #2F5C57;
+        --c-primary-2:   #3C716B;
+        --c-on-primary:  #F6F0E6;
+        --c-accent:      #D2AE6E;
+        --c-accent-2:    #E4C78F;
+        --c-line:        rgba(239, 231, 218, .12);
+        --c-shadow:      rgba(0, 0, 0, .4);
+
+        --svg-wall:      #34413E;
+        --svg-wall-2:    #2A3634;
+        --svg-roof:      #0E1514;
+        --svg-window:    #E8C27A;
+        --svg-ground:    #26312F;
+        --svg-tree:      #4C7F78;
+        --svg-sky:       #1A2523;
+      }
+    }
+
+    /* =========================================================
+       2. BASE
+       ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--c-bg);
+      color: var(--c-ink);
+      font-family: var(--f-sans);
+      font-size: 1rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1, h2, h3 {
+      font-family: var(--f-serif);
+      font-weight: 600;
+      line-height: 1.1;
+      margin: 0 0 .5em;
+      color: var(--c-ink);
+    }
+    p { margin: 0 0 1em; }
+    a { color: inherit; }
+    svg { display: block; max-width: 100%; }
+    img { max-width: 100%; }
+
+    .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
+    .section   { padding: clamp(64px, 10vw, 120px) 0; }
+
+    /* Lien d'évitement pour la navigation clavier */
+    .skip-link {
+      position: absolute; left: 16px; top: -60px; z-index: 200;
+      background: var(--c-primary); color: var(--c-on-primary);
+      padding: 10px 16px; border-radius: var(--radius-sm); text-decoration: none;
+    }
+    .skip-link:focus { top: 16px; }
+
+    :focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
+
+    /* En-tête de section réutilisable */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: .78rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--c-accent);
+      margin-bottom: 14px;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+    .section-head { max-width: 640px; margin-bottom: clamp(36px, 5vw, 56px); }
+    .section-head h2 { font-size: clamp(2rem, 4.2vw, 3rem); }
+    .section-head p:not(.eyebrow) { color: var(--c-ink-soft); font-size: 1.05rem; }
+
+    /* Boutons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 15px 26px;
+      border-radius: 999px;
+      font: 600 .95rem/1 var(--f-sans);
+      text-decoration: none;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: transform .25s var(--ease), background-color .25s, color .25s, box-shadow .25s, border-color .25s;
+    }
+    .btn svg { width: 18px; height: 18px; transition: transform .25s var(--ease); }
+    .btn:hover svg { transform: translateX(3px); }
+    .btn-primary { background: var(--c-primary); color: var(--c-on-primary); box-shadow: 0 10px 24px -10px var(--c-primary); }
+    .btn-primary:hover { background: var(--c-primary-2); transform: translateY(-2px); }
+    .btn-ghost { border-color: var(--c-accent); color: var(--c-ink); background: transparent; }
+    .btn-ghost:hover { background: var(--c-accent); color: #fff; transform: translateY(-2px); }
+
+    /* =========================================================
+       3. BARRE DE PROGRESSION DE SCROLL
+       ========================================================= */
+    .scroll-progress {
+      position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 120;
+      background: linear-gradient(90deg, var(--c-accent), var(--c-accent-2));
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+    }
+
+    /* =========================================================
+       4. HEADER STICKY
+       ========================================================= */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: color-mix(in srgb, var(--c-bg) 82%, transparent);
+      backdrop-filter: saturate(1.4) blur(12px);
+      -webkit-backdrop-filter: saturate(1.4) blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .site-header.is-scrolled { border-bottom-color: var(--c-line); box-shadow: 0 6px 24px -18px var(--c-shadow); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+
+    .logo { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-mark { width: 40px; height: 40px; flex: none; }
+    .logo-text { font-family: var(--f-serif); font-size: 1.5rem; font-weight: 700; letter-spacing: .01em; line-height: 1; }
+    .logo-text small {
+      display: block; font-family: var(--f-sans); font-size: .62rem; font-weight: 500;
+      letter-spacing: .26em; text-transform: uppercase; color: var(--c-accent); margin-top: 4px;
+    }
+
+    .nav ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: clamp(18px, 2.5vw, 34px); }
+    .nav a { text-decoration: none; font-size: .93rem; font-weight: 500; color: var(--c-ink-soft); position: relative; padding: 6px 0; transition: color .2s; }
+    .nav a:not(.btn)::after {
+      content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px;
+      background: var(--c-accent); transform: scaleX(0); transform-origin: right; transition: transform .3s var(--ease);
+    }
+    .nav a:not(.btn):hover { color: var(--c-ink); }
+    .nav a:not(.btn):hover::after { transform: scaleX(1); transform-origin: left; }
+    .nav .btn { padding: 11px 20px; color: var(--c-on-primary); }
+
+    /* Burger (mobile) */
+    .nav-toggle {
+      display: none; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer;
+      border-radius: var(--radius-sm); color: var(--c-ink);
+    }
+    .nav-toggle span { display: block; width: 22px; height: 2px; margin: 5px auto; background: currentColor; border-radius: 2px; transition: transform .3s var(--ease), opacity .2s; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 880px) {
+      .nav-toggle { display: block; }
+      .nav {
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--c-bg); border-bottom: 1px solid var(--c-line);
+        box-shadow: 0 20px 30px -20px var(--c-shadow);
+        max-height: 0; overflow: hidden; transition: max-height .4s var(--ease);
+      }
+      .nav.is-open { max-height: 420px; }
+      .nav ul { flex-direction: column; align-items: stretch; gap: 0; padding: 8px var(--gutter) 22px; }
+      .nav li a:not(.btn) { display: block; padding: 14px 0; border-bottom: 1px solid var(--c-line); }
+      .nav li a:not(.btn)::after { display: none; }
+      .nav .btn { margin-top: 16px; width: 100%; }
+    }
+
+    /* =========================================================
+       5. HERO
+       ========================================================= */
+    .hero { position: relative; padding: clamp(40px, 7vw, 90px) 0 clamp(64px, 9vw, 110px); overflow: hidden; }
+    .hero::before { /* halo décoratif */
+      content: ""; position: absolute; right: -10%; top: -20%; width: 60vw; height: 60vw; max-width: 760px; max-height: 760px;
+      background: radial-gradient(circle, color-mix(in srgb, var(--c-accent) 22%, transparent) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-grid { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+    .hero h1 { font-size: clamp(2.6rem, 6.2vw, 4.8rem); font-weight: 600; letter-spacing: -.01em; }
+    .hero h1 em { font-style: italic; color: var(--c-accent); font-weight: 500; }
+    .hero-lead { font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--c-ink-soft); max-width: 520px; margin-bottom: 34px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+    .hero-trust { display: flex; align-items: center; gap: 14px; margin-top: 40px; font-size: .88rem; color: var(--c-ink-soft); }
+    .hero-trust .stars { color: var(--c-accent); letter-spacing: 2px; font-size: 1rem; }
+
+    /* Entrée en cascade au chargement */
+    .reveal-load { opacity: 0; transform: translateY(26px); }
+    .is-loaded .reveal-load { animation: rise .9s var(--ease) forwards; animation-delay: calc(var(--i, 0) * 140ms + 100ms); }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+
+    /* Illustration du hero */
+    .hero-art { position: relative; }
+    .hero-art .frame {
+      position: relative; border-radius: 28px; overflow: hidden;
+      background: var(--svg-sky);
+      box-shadow: 0 40px 80px -40px var(--c-shadow), inset 0 0 0 1px var(--c-line);
+      aspect-ratio: 5 / 4.4;
+    }
+    .hero-art svg.scene { width: 100%; height: 100%; }
+    .float { animation: float 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .float-slow { animation: float 9s ease-in-out infinite; transform-box: fill-box; }
+    .drift { animation: drift 40s linear infinite; }
+    .drift-2 { animation: drift 60s linear infinite; animation-delay: -20s; }
+    .glow { animation: glow 4s ease-in-out infinite; }
+    .sway { animation: sway 5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes drift { from { transform: translateX(-160px); } to { transform: translateX(620px); } }
+    @keyframes glow  { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+    @keyframes sway  { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+
+    /* Badges flottants autour de l'illustration */
+    .hero-badge {
+      position: absolute; display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: 14px;
+      background: var(--c-surface); box-shadow: 0 18px 40px -18px var(--c-shadow); border: 1px solid var(--c-line);
+      font-size: .85rem; line-height: 1.3;
+    }
+    .hero-badge strong { display: block; font-family: var(--f-serif); font-size: 1.25rem; color: var(--c-ink); }
+    .hero-badge span { color: var(--c-ink-soft); }
+    .hero-badge .ico { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: color-mix(in srgb, var(--c-accent) 18%, transparent); color: var(--c-accent); flex: none; }
+    .hero-badge .ico svg { width: 20px; height: 20px; }
+    .hero-badge--a { left: -22px; bottom: 14%; animation: float 7s ease-in-out infinite; }
+    .hero-badge--b { right: -14px; top: 10%; animation: float 8s ease-in-out infinite; animation-delay: -3s; }
+
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-art { max-width: 560px; margin: 0 auto; width: 100%; }
+      .hero-badge--a { left: 8px; }
+      .hero-badge--b { right: 8px; }
+    }
+    @media (max-width: 480px) {
+      .hero-actions .btn { flex: 1 1 100%; }
+      .hero-badge { padding: 9px 12px; font-size: .78rem; }
+      .hero-badge strong { font-size: 1.05rem; }
+      .hero-badge .ico { width: 30px; height: 30px; }
+    }
+
+    /* =========================================================
+       6. STATISTIQUES
+       ========================================================= */
+    .stats { background: var(--c-primary); color: var(--c-on-primary); position: relative; overflow: hidden; }
+    .stats::after { /* motif de lignes subtil */
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .07;
+      background-image: repeating-linear-gradient(135deg, var(--c-on-primary) 0 1px, transparent 1px 22px);
+    }
+    .stats-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); padding: clamp(44px, 6vw, 70px) 0; }
+    .stat { text-align: center; padding: 8px 20px; }
+    .stat + .stat { border-left: 1px solid rgba(246, 240, 230, .18); }
+    .stat-value { font-family: var(--f-serif); font-size: clamp(2.8rem, 6vw, 4.2rem); font-weight: 600; line-height: 1; color: var(--c-accent-2); font-variant-numeric: lining-nums tabular-nums; }
+    .stat-label { margin-top: 10px; font-size: .92rem; letter-spacing: .04em; opacity: .85; }
+    @media (max-width: 680px) {
+      .stats-grid { grid-template-columns: 1fr; gap: 8px; }
+      .stat { padding: 20px 0; }
+      .stat + .stat { border-left: 0; border-top: 1px solid rgba(246, 240, 230, .18); }
+    }
+
+    /* Apparition au scroll (générique) */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s var(--ease), transform .8s var(--ease); transition-delay: calc(var(--i, 0) * 110ms); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* =========================================================
+       7. BIENS EN VEDETTE
+       ========================================================= */
+    .listings-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .listings-head .section-head { margin-bottom: 0; }
+    .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 2.4vw, 30px); margin-top: clamp(36px, 5vw, 56px); }
+    .card {
+      background: var(--c-surface); border-radius: var(--radius); overflow: hidden;
+      border: 1px solid var(--c-line);
+      box-shadow: 0 18px 40px -30px var(--c-shadow);
+      display: flex; flex-direction: column;
+      transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -30px var(--c-shadow); }
+    .card-visual { position: relative; aspect-ratio: 4 / 3; background: var(--svg-sky); overflow: hidden; }
+    .card-visual svg { width: 100%; height: 100%; transition: transform .7s var(--ease); }
+    .card:hover .card-visual svg { transform: scale(1.04); }
+    .card-tag {
+      position: absolute; top: 14px; left: 14px; z-index: 1;
+      background: var(--c-surface); color: var(--c-ink); font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      padding: 7px 12px; border-radius: 999px; box-shadow: 0 6px 14px -8px var(--c-shadow);
+    }
+    .card-tag--new { background: var(--c-accent); color: #fff; }
+    .card-body { padding: 22px 24px 24px; display: flex; flex-direction: column; flex: 1; }
+    .card-type { font-size: .78rem; text-transform: uppercase; letter-spacing: .14em; color: var(--c-accent); font-weight: 600; }
+    .card-title { font-size: 1.55rem; margin: 6px 0 4px; }
+    .card-place { font-size: .9rem; color: var(--c-ink-soft); display: flex; align-items: center; gap: 6px; margin-bottom: 16px; }
+    .card-place svg { width: 15px; height: 15px; }
+    .card-features { display: flex; flex-wrap: wrap; gap: 8px 18px; list-style: none; padding: 14px 0; margin: 0 0 16px; border-top: 1px solid var(--c-line); border-bottom: 1px solid var(--c-line); font-size: .86rem; color: var(--c-ink-soft); }
+    .card-features li { display: flex; align-items: center; gap: 6px; }
+    .card-features svg { width: 16px; height: 16px; color: var(--c-accent); }
+    .card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .card-price { font-family: var(--f-serif); font-size: 1.7rem; font-weight: 700; color: var(--c-primary); font-variant-numeric: lining-nums; }
+    @media (prefers-color-scheme: dark) { .card-price { color: var(--c-accent-2); } }
+    .card-link {
+      width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+      border: 1px solid var(--c-line); color: var(--c-ink); transition: background .25s, color .25s, border-color .25s;
+    }
+    .card-link svg { width: 18px; height: 18px; }
+    .card:hover .card-link { background: var(--c-accent); border-color: var(--c-accent); color: #fff; }
+
+    @media (max-width: 980px) { .listings-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .listings-grid { grid-template-columns: 1fr; } }
+
+    /* =========================================================
+       8. SERVICES
+       ========================================================= */
+    .services { background: var(--c-bg-alt); }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 2.4vw, 30px); }
+    .service {
+      position: relative; padding: clamp(28px, 3vw, 40px); border-radius: var(--radius);
+      background: var(--c-surface); border: 1px solid var(--c-line);
+      overflow: hidden; transition: transform .4s var(--ease), border-color .3s;
+    }
+    .service::before { /* filet doré qui se déploie au survol */
+      content: ""; position: absolute; left: 0; top: 0; height: 3px; width: 100%;
+      background: linear-gradient(90deg, var(--c-accent), var(--c-accent-2));
+      transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease);
+    }
+    .service:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c-accent) 40%, transparent); }
+    .service:hover::before { transform: scaleX(1); }
+    .service-num { position: absolute; right: 24px; top: 16px; font-family: var(--f-serif); font-size: 3.6rem; font-weight: 700; color: var(--c-line); line-height: 1; }
+    .service-icon {
+      width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; margin-bottom: 24px;
+      background: var(--c-primary); color: var(--c-accent-2);
+    }
+    .service-icon svg { width: 28px; height: 28px; }
+    .service h3 { font-size: 1.75rem; }
+    .service p { color: var(--c-ink-soft); font-size: .97rem; }
+    .service ul { list-style: none; padding: 0; margin: 18px 0 0; font-size: .9rem; }
+    .service li { display: flex; gap: 10px; padding: 6px 0; }
+    .service li::before { content: ""; flex: none; width: 6px; height: 6px; margin-top: .6em; border-radius: 50%; background: var(--c-accent); }
+    @media (max-width: 900px) { .services-grid { grid-template-columns: 1fr; max-width: 620px; } }
+
+    /* =========================================================
+       9. TÉMOIGNAGE
+       ========================================================= */
+    .testimonial { text-align: center; }
+    .quote-wrap { max-width: 860px; margin: 0 auto; position: relative; }
+    .quote-mark { width: 64px; height: 64px; margin: 0 auto 18px; color: var(--c-accent); }
+    .quote-text {
+      font-family: var(--f-serif); font-style: italic; font-weight: 500;
+      font-size: clamp(1.5rem, 3.2vw, 2.3rem); line-height: 1.35; color: var(--c-ink); margin: 0 0 34px;
+    }
+    .quote-author { display: inline-flex; align-items: center; gap: 16px; text-align: left; }
+    .avatar {
+      width: 60px; height: 60px; border-radius: 50%; flex: none;
+      background: var(--c-primary); color: var(--c-accent-2);
+      display: grid; place-items: center; font-family: var(--f-serif); font-size: 1.4rem; font-weight: 700;
+      box-shadow: 0 0 0 4px var(--c-bg), 0 0 0 5px var(--c-accent);
+    }
+    .quote-author strong { display: block; font-size: 1rem; }
+    .quote-author span { font-size: .88rem; color: var(--c-ink-soft); }
+    .quote-stars { color: var(--c-accent); letter-spacing: 3px; margin-bottom: 18px; }
+
+    /* =========================================================
+       10. CONTACT
+       ========================================================= */
+    .contact { background: var(--c-bg-alt); }
+    .contact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
+    .contact-info { list-style: none; padding: 0; margin: 28px 0 0; }
+    .contact-info li { display: flex; gap: 16px; padding: 16px 0; border-top: 1px solid var(--c-line); }
+    .contact-info li:last-child { border-bottom: 1px solid var(--c-line); }
+    .contact-info .ico { width: 42px; height: 42px; border-radius: 12px; flex: none; display: grid; place-items: center; background: var(--c-surface); color: var(--c-accent); border: 1px solid var(--c-line); }
+    .contact-info .ico svg { width: 20px; height: 20px; }
+    .contact-info strong { display: block; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--c-ink-soft); font-weight: 600; }
+    .contact-info a { text-decoration: none; }
+    .contact-info a:hover { color: var(--c-accent); }
+
+    .form-card {
+      position: relative; background: var(--c-surface); border-radius: 24px; padding: clamp(24px, 4vw, 44px);
+      border: 1px solid var(--c-line); box-shadow: 0 30px 60px -40px var(--c-shadow);
+    }
+    .field { margin-bottom: 20px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; gap: 0; } }
+    label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 8px; }
+    input, textarea {
+      width: 100%; font: inherit; font-size: 1rem; color: var(--c-ink);
+      background: var(--c-bg); border: 1.5px solid var(--c-line); border-radius: 12px;
+      padding: 14px 16px; transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+    textarea { min-height: 150px; resize: vertical; }
+    input::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--c-ink-soft) 70%, transparent); }
+    input:focus, textarea:focus { outline: none; border-color: var(--c-accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-accent) 20%, transparent); background: var(--c-surface); }
+    .field.has-error input, .field.has-error textarea { border-color: #C2553F; }
+    .error-msg { display: none; color: #C2553F; font-size: .82rem; margin-top: 6px; }
+    @media (prefers-color-scheme: dark) { .error-msg { color: #E58A74; } .field.has-error input, .field.has-error textarea { border-color: #E58A74; } }
+    .field.has-error .error-msg { display: block; }
+    .form-note { font-size: .8rem; color: var(--c-ink-soft); margin: 14px 0 0; }
+    .form-card form .btn { width: 100%; }
+    .btn.is-loading { pointer-events: none; opacity: .8; }
+    .spinner { width: 18px; height: 18px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Confirmation visuelle d'envoi */
+    .form-success {
+      position: absolute; inset: 0; border-radius: inherit; background: var(--c-surface);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      padding: 32px; opacity: 0; visibility: hidden; transform: scale(.97);
+      transition: opacity .5s var(--ease), transform .5s var(--ease), visibility .5s;
+    }
+    .form-success.is-visible { opacity: 1; visibility: visible; transform: none; }
+    .form-success h3 { font-size: 2rem; margin-top: 22px; }
+    .form-success p { color: var(--c-ink-soft); max-width: 360px; }
+    .check-anim { width: 92px; height: 92px; }
+    .check-anim circle { stroke-dasharray: 290; stroke-dashoffset: 290; }
+    .check-anim path   { stroke-dasharray: 60;  stroke-dashoffset: 60; }
+    .form-success.is-visible .check-anim circle { animation: draw .7s var(--ease) .1s forwards; }
+    .form-success.is-visible .check-anim path   { animation: draw .45s var(--ease) .7s forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+
+    @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+
+    /* =========================================================
+       11. FOOTER
+       ========================================================= */
+    .site-footer { background: var(--c-primary); color: color-mix(in srgb, var(--c-on-primary) 80%, transparent); padding: clamp(56px, 7vw, 80px) 0 28px; font-size: .92rem; }
+    @media (prefers-color-scheme: dark) { .site-footer { background: #0D1413; } }
+    .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 36px; padding-bottom: 44px; border-bottom: 1px solid rgba(246, 240, 230, .14); }
+    .site-footer .logo-text { color: var(--c-on-primary); }
+    .site-footer h4 { font-family: var(--f-sans); font-size: .76rem; letter-spacing: .18em; text-transform: uppercase; color: var(--c-accent-2); margin: 0 0 16px; font-weight: 600; }
+    .site-footer ul { list-style: none; margin: 0; padding: 0; }
+    .site-footer li { padding: 5px 0; }
+    .site-footer a { text-decoration: none; transition: color .2s; }
+    .site-footer a:hover { color: var(--c-accent-2); }
+    .footer-about { margin-top: 18px; max-width: 320px; }
+    .socials { display: flex; gap: 10px; margin-top: 20px; }
+    .socials a { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(246, 240, 230, .22); }
+    .socials a:hover { background: var(--c-accent); border-color: var(--c-accent); color: #fff; }
+    .socials svg { width: 17px; height: 17px; }
+    .footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 24px; font-size: .82rem; opacity: .75; }
+    @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    /* =========================================================
+       12. CHATBOT FLOTTANT
+       ========================================================= */
+    .chat-launcher {
+      position: fixed; right: clamp(16px, 3vw, 28px); bottom: clamp(16px, 3vw, 28px); z-index: 150;
+      width: 62px; height: 62px; border-radius: 50%; border: 0; cursor: pointer;
+      background: var(--c-primary); color: var(--c-accent-2);
+      box-shadow: 0 16px 34px -10px rgba(0, 0, 0, .45);
+      display: grid; place-items: center;
+      transition: transform .3s var(--ease), background .3s;
+    }
+    .chat-launcher:hover { transform: scale(1.07); background: var(--c-primary-2); }
+    .chat-launcher svg { width: 28px; height: 28px; transition: transform .3s var(--ease), opacity .2s; position: absolute; }
+    .chat-launcher .ico-close { opacity: 0; transform: rotate(-90deg); }
+    .chat-launcher[aria-expanded="true"] .ico-open  { opacity: 0; transform: rotate(90deg); }
+    .chat-launcher[aria-expanded="true"] .ico-close { opacity: 1; transform: none; }
+    .chat-launcher::before { /* pulsation d'appel */
+      content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--c-accent);
+      animation: pulse 2.4s ease-out infinite;
+    }
+    .chat-launcher[aria-expanded="true"]::before { display: none; }
+    @keyframes pulse { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.6); opacity: 0; } }
+    .chat-badge {
+      position: absolute; top: -2px; right: -2px; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--c-accent); color: #fff; font: 700 .7rem/20px var(--f-sans); text-align: center;
+      border: 2px solid var(--c-bg);
+    }
+
+    .chat-panel {
+      position: fixed; right: clamp(16px, 3vw, 28px); bottom: calc(clamp(16px, 3vw, 28px) + 78px); z-index: 150;
+      width: min(380px, calc(100vw - 32px)); height: min(560px, calc(100dvh - 130px));
+      background: var(--c-surface); border-radius: 22px; border: 1px solid var(--c-line);
+      box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .4);
+      display: flex; flex-direction: column; overflow: hidden;
+      opacity: 0; visibility: hidden; transform: translateY(16px) scale(.97); transform-origin: bottom right;
+      transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
+    }
+    .chat-panel.is-open { opacity: 1; visibility: visible; transform: none; }
+    .chat-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: var(--c-primary); color: var(--c-on-primary); }
+    .chat-head .avatar { width: 42px; height: 42px; font-size: 1.05rem; box-shadow: 0 0 0 2px var(--c-accent-2); background: var(--c-primary-2); }
+    .chat-head strong { display: block; font-size: .98rem; }
+    .chat-head small { font-size: .78rem; opacity: .8; display: flex; align-items: center; gap: 6px; }
+    .chat-head small::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #7BD389; }
+
+    .chat-body { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 10px; background: var(--c-bg); overscroll-behavior: contain; }
+    .msg { max-width: 85%; padding: 11px 14px; border-radius: 16px; font-size: .9rem; line-height: 1.5; animation: msgIn .35s var(--ease); white-space: pre-line; }
+    .msg--bot  { align-self: flex-start; background: var(--c-surface); border: 1px solid var(--c-line); border-bottom-left-radius: 4px; }
+    .msg--user { align-self: flex-end; background: var(--c-primary); color: var(--c-on-primary); border-bottom-right-radius: 4px; }
+    .msg a { color: var(--c-accent); font-weight: 600; }
+    @keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .typing { display: inline-flex; gap: 4px; padding: 14px 16px; }
+    .typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--c-ink-soft); animation: blink 1.2s infinite; }
+    .typing i:nth-child(2) { animation-delay: .2s; }
+    .typing i:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%, 80%, 100% { opacity: .25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+
+    .chat-suggestions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px 4px; background: var(--c-surface); border-top: 1px solid var(--c-line); }
+    .chip {
+      font: 500 .82rem var(--f-sans); padding: 8px 13px; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--c-accent); background: transparent; color: var(--c-ink);
+      transition: background .2s, color .2s;
+    }
+    .chip:hover { background: var(--c-accent); color: #fff; }
+    .chat-form { display: flex; gap: 8px; padding: 10px 12px 14px; background: var(--c-surface); }
+    .chat-form input { padding: 12px 14px; border-radius: 999px; font-size: .9rem; }
+    .chat-form button {
+      flex: none; width: 46px; height: 46px; border-radius: 50%; border: 0; cursor: pointer;
+      background: var(--c-accent); color: #fff; display: grid; place-items: center; transition: transform .2s;
+    }
+    .chat-form button:hover { transform: scale(1.06); }
+    .chat-form button svg { width: 18px; height: 18px; }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+    /* =========================================================
+       13. ACCESSIBILITÉ — prefers-reduced-motion
+       Désactive toutes les animations / transitions non essentielles.
+       ========================================================= */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
+        transition-duration: .001ms !important;
+        transition-delay: 0ms !important;
+      }
+      .reveal, .reveal-load { opacity: 1 !important; transform: none !important; }
+      .chat-launcher::before { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+
+  <!-- Barre de progression de lecture -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <a href="#accueil" class="logo" aria-label="Accueil">
+        <!-- Logo : toit stylisé + arche -->
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <rect width="40" height="40" rx="11" fill="var(--c-primary)"/>
+          <path d="M8 21 20 10l12 11" fill="none" stroke="var(--c-accent-2)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 19v11h16V19" fill="none" stroke="var(--c-on-primary)" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M17 30v-5a3 3 0 0 1 6 0v5" fill="none" stroke="var(--c-accent-2)" stroke-width="2"/>
+        </svg>
+        <span class="logo-text"><span data-agency>Maison Aurore</span><small>Immobilier</small></span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav" id="nav" aria-label="Navigation principale">
+        <ul>
+          <li><a href="#biens">Nos biens</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#avis">Avis clients</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#contact" class="btn btn-primary">Estimer mon bien</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+    <section class="hero" id="accueil">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow reveal-load" style="--i:0">Agence immobilière indépendante</p>
+          <h1 class="reveal-load" style="--i:1">Votre prochain chez-vous mérite <em>une attention rare.</em></h1>
+          <p class="hero-lead reveal-load" style="--i:2">
+            Estimation juste, vente maîtrisée, recherche sur-mesure : nous accompagnons chaque projet
+            avec l'exigence d'un artisan et la connaissance intime de notre territoire.
+          </p>
+          <div class="hero-actions reveal-load" style="--i:3">
+            <a href="#contact" class="btn btn-primary">
+              Estimer mon bien gratuitement
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#biens" class="btn btn-ghost">Voir les biens</a>
+          </div>
+          <div class="hero-trust reveal-load" style="--i:4">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span><strong>4,9/5</strong> — plus de 320 avis vérifiés</span>
+          </div>
+        </div>
+
+        <!-- Illustration SVG animée : maison de caractère -->
+        <div class="hero-art reveal-load" style="--i:2">
+          <div class="frame">
+            <svg class="scene" viewBox="0 0 500 440" role="img" aria-label="Illustration d'une maison de caractère au soleil couchant">
+              <defs>
+                <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="var(--c-accent-2)"/>
+                  <stop offset="1" stop-color="var(--c-accent)"/>
+                </linearGradient>
+                <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="var(--svg-tree)" stop-opacity=".35"/>
+                  <stop offset="1" stop-color="var(--svg-tree)" stop-opacity=".1"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Soleil + halo -->
+              <circle class="glow" cx="372" cy="118" r="78" fill="var(--c-accent)" opacity=".18"/>
+              <circle cx="372" cy="118" r="48" fill="url(#sun)"/>
+
+              <!-- Nuages qui dérivent -->
+              <g class="drift" opacity=".9">
+                <path d="M40 80a18 18 0 0 1 34-6 14 14 0 0 1 22 12H36a10 10 0 0 1 4-6z" fill="var(--c-surface)"/>
+              </g>
+              <g class="drift-2" opacity=".75">
+                <path d="M20 150a14 14 0 0 1 26-4 11 11 0 0 1 17 9H16a8 8 0 0 1 4-5z" fill="var(--c-surface)"/>
+              </g>
+
+              <!-- Collines -->
+              <path d="M0 300 C90 250 170 270 250 285 S420 250 500 270 V440 H0Z" fill="url(#hill)"/>
+              <path d="M0 360 C120 330 260 345 500 330 V440 H0Z" fill="var(--svg-ground)"/>
+
+              <!-- Maison (flottement léger) -->
+              <g class="float">
+                <!-- Ombre portée -->
+                <ellipse cx="250" cy="372" rx="150" ry="10" fill="var(--c-primary)" opacity=".12"/>
+                <!-- Aile gauche -->
+                <rect x="112" y="238" width="92" height="128" fill="var(--svg-wall-2)"/>
+                <path d="M102 244 158 196l56 48z" fill="var(--svg-roof)"/>
+                <rect x="138" y="268" width="40" height="46" rx="2" fill="var(--svg-window)"/>
+                <path d="M158 268v46M138 291h40" stroke="var(--svg-roof)" stroke-width="3"/>
+                <!-- Corps principal -->
+                <rect x="196" y="196" width="168" height="170" fill="var(--svg-wall)"/>
+                <path d="M182 204 280 118l98 86z" fill="var(--svg-roof)"/>
+                <path d="M182 204 280 118l98 86" fill="none" stroke="var(--c-accent)" stroke-width="3" stroke-linejoin="round"/>
+                <!-- Cheminée -->
+                <rect x="324" y="132" width="20" height="44" fill="var(--svg-roof)"/>
+                <rect x="320" y="128" width="28" height="7" fill="var(--c-accent)"/>
+                <!-- Œil-de-bœuf -->
+                <circle cx="280" cy="170" r="14" fill="var(--svg-window)" class="glow"/>
+                <circle cx="280" cy="170" r="14" fill="none" stroke="var(--c-accent)" stroke-width="3"/>
+                <!-- Fenêtres -->
+                <g fill="var(--svg-window)">
+                  <rect x="214" y="222" width="36" height="46" rx="18" ry="18"/>
+                  <rect x="310" y="222" width="36" height="46" rx="18" ry="18"/>
+                </g>
+                <path d="M232 222v46M214 248h36M328 222v46M310 248h36" stroke="var(--svg-roof)" stroke-width="2.5"/>
+                <!-- Porte -->
+                <path d="M258 366v-58a22 22 0 0 1 44 0v58z" fill="var(--svg-roof)"/>
+                <circle cx="292" cy="338" r="3" fill="var(--c-accent)"/>
+                <!-- Marches -->
+                <rect x="250" y="362" width="60" height="6" fill="var(--c-accent)" opacity=".7"/>
+                <!-- Fenêtres basses -->
+                <rect x="214" y="296" width="30" height="34" fill="var(--svg-window)"/>
+                <rect x="316" y="296" width="30" height="34" fill="var(--svg-window)"/>
+                <path d="M229 296v34M331 296v34" stroke="var(--svg-roof)" stroke-width="2.5"/>
+              </g>
+
+              <!-- Arbres (balancement) -->
+              <g class="sway">
+                <rect x="420" y="300" width="6" height="64" fill="var(--svg-roof)"/>
+                <ellipse cx="423" cy="290" rx="28" ry="44" fill="var(--svg-tree)"/>
+              </g>
+              <g class="sway" style="animation-delay:-2s">
+                <rect x="66" y="318" width="5" height="48" fill="var(--svg-roof)"/>
+                <ellipse cx="68" cy="306" rx="20" ry="32" fill="var(--svg-tree)" opacity=".85"/>
+              </g>
+
+              <!-- Panneau « À vendre » -->
+              <g class="float-slow">
+                <rect x="384" y="336" width="4" height="34" fill="var(--svg-roof)"/>
+                <rect x="360" y="314" width="52" height="28" rx="4" fill="var(--c-accent)"/>
+                <text x="386" y="333" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#fff">VENDU</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="hero-badge hero-badge--a">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span>
+            <div><strong>+8 %</strong><span>au-dessus du prix marché</span></div>
+          </div>
+          <div class="hero-badge hero-badge--b">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <div><strong>48 h</strong><span>pour votre estimation</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         STATISTIQUES (compteurs animés au scroll)
+         ===================================================== -->
+    <section class="stats" aria-label="Chiffres clés">
+      <div class="container stats-grid">
+        <div class="stat reveal" style="--i:0">
+          <div class="stat-value"><span class="counter" data-target="1250" data-prefix="+">0</span></div>
+          <div class="stat-label">biens vendus depuis 2009</div>
+        </div>
+        <div class="stat reveal" style="--i:1">
+          <div class="stat-value"><span class="counter" data-target="47">0</span>&nbsp;j</div>
+          <div class="stat-label">délai moyen de vente</div>
+        </div>
+        <div class="stat reveal" style="--i:2">
+          <div class="stat-value"><span class="counter" data-target="98">0</span>&nbsp;%</div>
+          <div class="stat-label">de clients satisfaits</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         BIENS EN VEDETTE
+         ===================================================== -->
+    <section class="section" id="biens">
+      <div class="container">
+        <div class="listings-head">
+          <div class="section-head reveal">
+            <p class="eyebrow">Sélection du moment</p>
+            <h2>Biens en vedette</h2>
+            <p>Une sélection exigeante, visitée et vérifiée par nos conseillers. Chaque bien a été choisi pour son caractère et son emplacement.</p>
+          </div>
+          <a href="#contact" class="btn btn-ghost reveal">Toutes nos annonces</a>
+        </div>
+
+        <div class="listings-grid">
+
+          <!-- Bien 1 : Appartement haussmannien -->
+          <article class="card reveal" style="--i:0">
+            <div class="card-visual">
+              <span class="card-tag card-tag--new">Nouveauté</span>
+              <svg viewBox="0 0 400 300" role="img" aria-label="Illustration d'un immeuble haussmannien">
+                <rect width="400" height="300" fill="var(--svg-sky)"/>
+                <circle cx="320" cy="70" r="30" fill="var(--c-accent-2)" opacity=".6"/>
+                <rect x="0" y="262" width="400" height="38" fill="var(--svg-ground)"/>
+                <!-- Façade -->
+                <rect x="110" y="70" width="180" height="194" fill="var(--svg-wall)"/>
+                <path d="M100 74h200l-12-22H112z" fill="var(--svg-roof)"/>
+                <rect x="140" y="38" width="20" height="16" fill="var(--svg-roof)"/>
+                <rect x="240" y="38" width="20" height="16" fill="var(--svg-roof)"/>
+                <!-- Fenêtres sur 4 étages -->
+                <g fill="var(--svg-window)">
+                  <rect x="128" y="88" width="26" height="34" rx="13"/><rect x="187" y="88" width="26" height="34" rx="13"/><rect x="246" y="88" width="26" height="34" rx="13"/>
+                  <rect x="128" y="136" width="26" height="34"/><rect x="187" y="136" width="26" height="34"/><rect x="246" y="136" width="26" height="34"/>
+                  <rect x="128" y="184" width="26" height="34"/><rect x="187" y="184" width="26" height="34"/><rect x="246" y="184" width="26" height="34"/>
+                </g>
+                <!-- Balcons en fer forgé -->
+                <g stroke="var(--svg-roof)" stroke-width="2.5">
+                  <path d="M120 172h160M120 220h160"/>
+                  <path d="M124 172v-8M136 172v-8M148 172v-8M160 172v-8M172 172v-8M184 172v-8M196 172v-8M208 172v-8M220 172v-8M232 172v-8M244 172v-8M256 172v-8M268 172v-8M280 172v-8"/>
+                </g>
+                <!-- Rez-de-chaussée -->
+                <rect x="110" y="228" width="180" height="36" fill="var(--svg-wall-2)"/>
+                <path d="M184 264v-26a16 16 0 0 1 32 0v26z" fill="var(--svg-roof)"/>
+                <path d="M110 228h180" stroke="var(--c-accent)" stroke-width="3"/>
+                <!-- Arbre -->
+                <rect x="58" y="210" width="5" height="54" fill="var(--svg-roof)"/>
+                <circle cx="60" cy="200" r="24" fill="var(--svg-tree)"/>
+                <rect x="337" y="214" width="5" height="50" fill="var(--svg-roof)"/>
+                <circle cx="340" cy="204" r="20" fill="var(--svg-tree)" opacity=".85"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-type">Appartement</span>
+              <h3 class="card-title">Haussmannien lumineux</h3>
+              <p class="card-place">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+                Centre historique
+              </p>
+              <ul class="card-features">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>112 m²</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5M3 12h18v6H3zM5 18v2M19 18v2"/></svg>3 chambres</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20h16M6 20V10l6-5 6 5v10"/></svg>4ᵉ étage</li>
+              </ul>
+              <div class="card-foot">
+                <span class="card-price">685 000 €</span>
+                <a href="#contact" class="card-link" aria-label="Demander une visite : Haussmannien lumineux">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bien 2 : Maison contemporaine -->
+          <article class="card reveal" style="--i:1">
+            <div class="card-visual">
+              <span class="card-tag">Exclusivité</span>
+              <svg viewBox="0 0 400 300" role="img" aria-label="Illustration d'une maison contemporaine avec piscine">
+                <rect width="400" height="300" fill="var(--svg-sky)"/>
+                <circle cx="80" cy="64" r="26" fill="var(--c-accent-2)" opacity=".6"/>
+                <path d="M0 210 C100 190 200 200 400 186 V300 H0Z" fill="var(--svg-tree)" opacity=".18"/>
+                <rect x="0" y="246" width="400" height="54" fill="var(--svg-ground)"/>
+                <!-- Volumes cubiques -->
+                <rect x="70" y="150" width="150" height="98" fill="var(--svg-wall)"/>
+                <rect x="190" y="104" width="150" height="80" fill="var(--svg-wall-2)"/>
+                <rect x="184" y="98" width="162" height="10" fill="var(--svg-roof)"/>
+                <rect x="64" y="144" width="126" height="8" fill="var(--svg-roof)"/>
+                <!-- Baies vitrées -->
+                <rect x="204" y="120" width="120" height="48" fill="var(--svg-window)"/>
+                <path d="M244 120v48M284 120v48" stroke="var(--svg-roof)" stroke-width="2.5"/>
+                <rect x="86" y="170" width="80" height="78" fill="var(--svg-window)"/>
+                <path d="M126 170v78" stroke="var(--svg-roof)" stroke-width="2.5"/>
+                <!-- Bardage bois -->
+                <g stroke="var(--c-accent)" stroke-width="2" opacity=".8">
+                  <path d="M180 190v58M188 190v58M196 190v58M204 190v58M212 190v58"/>
+                </g>
+                <rect x="220" y="184" width="120" height="64" fill="var(--svg-wall)"/>
+                <!-- Piscine -->
+                <rect x="232" y="254" width="140" height="18" rx="3" fill="var(--c-primary-2)" opacity=".75"/>
+                <path d="M244 262c10-4 20 4 30 0s20 4 30 0 20 4 30 0" stroke="var(--svg-window)" stroke-width="1.5" fill="none" opacity=".8"/>
+                <!-- Végétation -->
+                <ellipse cx="40" cy="236" rx="18" ry="28" fill="var(--svg-tree)"/>
+                <ellipse cx="364" cy="226" rx="14" ry="34" fill="var(--svg-tree)" opacity=".85"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-type">Maison</span>
+              <h3 class="card-title">Villa contemporaine</h3>
+              <p class="card-place">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+                Coteaux résidentiels
+              </p>
+              <ul class="card-features">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>210 m²</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5M3 12h18v6H3zM5 18v2M19 18v2"/></svg>5 chambres</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 18c2-2 4 0 6 0s4-2 6 0 4 0 6 0M2 14c2-2 4 0 6 0s4-2 6 0 4 0 6 0"/></svg>Piscine</li>
+              </ul>
+              <div class="card-foot">
+                <span class="card-price">1 240 000 €</span>
+                <a href="#contact" class="card-link" aria-label="Demander une visite : Villa contemporaine">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bien 3 : Longère / maison de campagne -->
+          <article class="card reveal" style="--i:2">
+            <div class="card-visual">
+              <span class="card-tag">Coup de cœur</span>
+              <svg viewBox="0 0 400 300" role="img" aria-label="Illustration d'une longère en pierre à la campagne">
+                <rect width="400" height="300" fill="var(--svg-sky)"/>
+                <circle cx="330" cy="62" r="24" fill="var(--c-accent-2)" opacity=".6"/>
+                <path d="M0 196 C80 170 160 186 230 180 S360 160 400 172 V300 H0Z" fill="var(--svg-tree)" opacity=".22"/>
+                <rect x="0" y="244" width="400" height="56" fill="var(--svg-ground)"/>
+                <!-- Toit en ardoise -->
+                <path d="M54 170 96 120h208l42 50z" fill="var(--svg-roof)"/>
+                <!-- Murs en pierre -->
+                <rect x="64" y="168" width="272" height="80" fill="var(--svg-wall)"/>
+                <g fill="var(--svg-wall-2)">
+                  <rect x="74" y="178" width="18" height="10" rx="2"/><rect x="98" y="194" width="22" height="10" rx="2"/><rect x="72" y="214" width="16" height="10" rx="2"/>
+                  <rect x="306" y="180" width="20" height="10" rx="2"/><rect x="290" y="210" width="22" height="10" rx="2"/><rect x="314" y="226" width="14" height="10" rx="2"/>
+                  <rect x="176" y="176" width="18" height="9" rx="2"/><rect x="214" y="226" width="20" height="9" rx="2"/>
+                </g>
+                <!-- Lucarnes -->
+                <path d="M134 150l16-18 16 18z" fill="var(--svg-wall)"/>
+                <rect x="140" y="148" width="20" height="18" fill="var(--svg-window)"/>
+                <path d="M234 150l16-18 16 18z" fill="var(--svg-wall)"/>
+                <rect x="240" y="148" width="20" height="18" fill="var(--svg-window)"/>
+                <!-- Fenêtres + volets -->
+                <rect x="120" y="188" width="26" height="30" fill="var(--svg-window)"/>
+                <rect x="110" y="188" width="10" height="30" fill="var(--c-primary-2)"/><rect x="146" y="188" width="10" height="30" fill="var(--c-primary-2)"/>
+                <rect x="254" y="188" width="26" height="30" fill="var(--svg-window)"/>
+                <rect x="244" y="188" width="10" height="30" fill="var(--c-primary-2)"/><rect x="280" y="188" width="10" height="30" fill="var(--c-primary-2)"/>
+                <!-- Porte -->
+                <path d="M186 248v-44a14 14 0 0 1 28 0v44z" fill="var(--c-primary-2)"/>
+                <!-- Cheminées -->
+                <rect x="110" y="104" width="16" height="22" fill="var(--svg-wall-2)"/>
+                <rect x="276" y="104" width="16" height="22" fill="var(--svg-wall-2)"/>
+                <!-- Haies & arbre -->
+                <ellipse cx="34" cy="232" rx="26" ry="18" fill="var(--svg-tree)"/>
+                <ellipse cx="370" cy="234" rx="24" ry="16" fill="var(--svg-tree)"/>
+                <path d="M30 248h340" stroke="var(--c-accent)" stroke-width="2" stroke-dasharray="4 8" opacity=".6"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="card-type">Maison de campagne</span>
+              <h3 class="card-title">Longère en pierre</h3>
+              <p class="card-place">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+                À 20 min du centre
+              </p>
+              <ul class="card-features">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>165 m²</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5M3 12h18v6H3zM5 18v2M19 18v2"/></svg>4 chambres</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22V12M12 12c-4 0-7-3-7-7 4 0 7 3 7 7zM12 12c4 0 7-3 7-7-4 0-7 3-7 7z"/></svg>4 200 m² terrain</li>
+              </ul>
+              <div class="card-foot">
+                <span class="card-price">495 000 €</span>
+                <a href="#contact" class="card-link" aria-label="Demander une visite : Longère en pierre">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         SERVICES
+         ===================================================== -->
+    <section class="section services" id="services">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Notre savoir-faire</p>
+          <h2>Un accompagnement complet, à chaque étape</h2>
+          <p>Trois expertises complémentaires, un seul interlocuteur dédié du premier rendez-vous jusqu'à la remise des clés.</p>
+        </div>
+
+        <div class="services-grid">
+          <article class="service reveal" style="--i:0">
+            <span class="service-num" aria-hidden="true">01</span>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M9 16l2 2 4-4"/></svg>
+            </div>
+            <h3>Estimation</h3>
+            <p>Une évaluation précise et argumentée, fondée sur les ventes réelles du quartier et une visite approfondie de votre bien.</p>
+            <ul>
+              <li>Rapport détaillé sous 48 h</li>
+              <li>Analyse comparative du marché</li>
+              <li>100 % gratuite et sans engagement</li>
+            </ul>
+          </article>
+
+          <article class="service reveal" style="--i:1">
+            <span class="service-num" aria-hidden="true">02</span>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg>
+            </div>
+            <h3>Vente</h3>
+            <p>Une mise en valeur soignée et une diffusion ciblée pour vendre au juste prix, dans les meilleurs délais et en toute sérénité.</p>
+            <ul>
+              <li>Home staging &amp; visite virtuelle</li>
+              <li>Acquéreurs qualifiés et financés</li>
+              <li>Suivi juridique jusqu'à l'acte</li>
+            </ul>
+          </article>
+
+          <article class="service reveal" style="--i:2">
+            <span class="service-num" aria-hidden="true">03</span>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8 12l3-3 3 3v3H8z"/></svg>
+            </div>
+            <h3>Recherche</h3>
+            <p>Confiez-nous votre cahier des charges : nous chassons pour vous, y compris parmi les biens off-market jamais publiés.</p>
+            <ul>
+              <li>Accès aux biens confidentiels</li>
+              <li>Pré-visites filmées pour vous</li>
+              <li>Négociation à vos côtés</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         TÉMOIGNAGE
+         ===================================================== -->
+    <section class="section testimonial" id="avis">
+      <div class="container">
+        <figure class="quote-wrap reveal">
+          <svg class="quote-mark" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+            <path d="M14 46c-4-3-6-8-6-14 0-10 7-18 18-22l2 4c-7 3-10 8-10 12 3 0 9 1 9 9 0 6-5 11-11 11-1 0-2 0-2 0zm28 0c-4-3-6-8-6-14 0-10 7-18 18-22l2 4c-7 3-10 8-10 12 3 0 9 1 9 9 0 6-5 11-11 11-1 0-2 0-2 0z" opacity=".9"/>
+          </svg>
+          <div class="quote-stars" aria-label="Note : 5 sur 5">★★★★★</div>
+          <blockquote class="quote-text">
+            « Nous pensions vendre en six mois, l'appartement a trouvé preneur en trois semaines, au-dessus de notre prix.
+            Une équipe d'une disponibilité et d'une franchise remarquables : on s'est sentis épaulés à chaque étape. »
+          </blockquote>
+          <figcaption class="quote-author">
+            <span class="avatar" aria-hidden="true">CL</span>
+            <span>
+              <strong>Claire &amp; Laurent M.</strong>
+              <span>Vendeurs d'un T4 — centre-ville</span>
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CONTACT
+         ===================================================== -->
+    <section class="section contact" id="contact">
+      <div class="container contact-grid">
+        <div class="reveal">
+          <div class="section-head" style="margin-bottom:0">
+            <p class="eyebrow">Parlons de votre projet</p>
+            <h2>Une question, une estimation, une visite ?</h2>
+            <p>Écrivez-nous : un conseiller vous répond personnellement sous 24 heures ouvrées.</p>
+          </div>
+          <ul class="contact-info">
+            <li>
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+              <span><strong>Agence</strong>12 place du Marché, 00000 Votre Ville</span>
+            </li>
+            <li>
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
+              <span><strong>Téléphone</strong><a href="tel:+33100000000">01 00 00 00 00</a></span>
+            </li>
+            <li>
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+              <span><strong>E-mail</strong><a href="mailto:contact@exemple.fr">contact@exemple.fr</a></span>
+            </li>
+            <li>
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <span><strong>Horaires</strong>Lun – Ven : 9h – 19h · Sam : 10h – 17h</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="form-card reveal" style="--i:1">
+          <form id="contactForm" novalidate>
+            <div class="field-row">
+              <div class="field">
+                <label for="name">Nom complet</label>
+                <input id="name" name="name" type="text" autocomplete="name" placeholder="Jeanne Dupont" required>
+                <p class="error-msg" id="name-error">Merci d'indiquer votre nom.</p>
+              </div>
+              <div class="field">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="jeanne@exemple.fr" required>
+                <p class="error-msg" id="email-error">Merci d'indiquer une adresse e-mail valide.</p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="message">Votre message</label>
+              <textarea id="message" name="message" placeholder="Décrivez votre projet : vente, achat, estimation…" required></textarea>
+              <p class="error-msg" id="message-error">Votre message doit contenir au moins 10 caractères.</p>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              <span class="btn-label">Envoyer ma demande</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>
+            </button>
+            <p class="form-note">Vos données ne sont utilisées que pour répondre à votre demande.</p>
+          </form>
+
+          <!-- Écran de confirmation -->
+          <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+            <svg class="check-anim" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+              <circle cx="50" cy="50" r="46" stroke="var(--c-accent)" stroke-width="4"/>
+              <path d="M30 52l13 13 27-29" stroke="var(--c-primary)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h3>Merci <span id="successName"></span> !</h3>
+            <p>Votre message a bien été envoyé. Un conseiller vous recontacte sous 24 heures ouvrées.</p>
+            <button type="button" class="btn btn-ghost" id="resetForm">Envoyer un autre message</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#accueil" class="logo" aria-label="Retour en haut">
+            <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">
+              <rect width="40" height="40" rx="11" fill="var(--c-accent)"/>
+              <path d="M8 21 20 10l12 11" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 19v11h16V19" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <span class="logo-text"><span data-agency>Maison Aurore</span><small>Immobilier</small></span>
+          </a>
+          <p class="footer-about">Agence immobilière indépendante. Estimation, vente et recherche de biens de caractère depuis 2009.</p>
+          <div class="socials">
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 3h-2a4 4 0 0 0-4 4v3H7v4h2v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h2z"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#biens">Nos biens</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#avis">Avis clients</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#services">Estimation gratuite</a></li>
+            <li><a href="#services">Vente</a></li>
+            <li><a href="#services">Recherche personnalisée</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Agence</h4>
+          <ul>
+            <li>12 place du Marché</li>
+            <li>00000 Votre Ville</li>
+            <li><a href="tel:+33100000000">01 00 00 00 00</a></li>
+            <li><a href="mailto:contact@exemple.fr">contact@exemple.fr</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year">2026</span> <span data-agency>Maison Aurore</span>. Tous droits réservés.</span>
+        <span><a href="#">Mentions légales</a> · <a href="#">Honoraires</a> · <a href="#">Confidentialité</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =====================================================
+       CHATBOT FLOTTANT
+       ===================================================== -->
+  <button class="chat-launcher" id="chatLauncher" aria-label="Ouvrir l'assistant" aria-expanded="false" aria-controls="chatPanel">
+    <svg class="ico-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg>
+    <svg class="ico-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    <span class="chat-badge" id="chatBadge" aria-hidden="true">1</span>
+  </button>
+
+  <section class="chat-panel" id="chatPanel" role="dialog" aria-label="Assistant de l'agence" aria-hidden="true">
+    <header class="chat-head">
+      <span class="avatar" aria-hidden="true">A</span>
+      <div>
+        <strong>Assistant <span data-agency>Maison Aurore</span></strong>
+        <small>En ligne · répond instantanément</small>
+      </div>
+    </header>
+    <div class="chat-body" id="chatBody" aria-live="polite"></div>
+    <div class="chat-suggestions" id="chatSuggestions">
+      <button type="button" class="chip" data-q="Quels sont vos horaires ?">🕘 Horaires</button>
+      <button type="button" class="chip" data-q="Je souhaite une estimation">🏠 Estimation</button>
+      <button type="button" class="chip" data-q="Je voudrais prendre rendez-vous">📅 Prise de RDV</button>
+    </div>
+    <form class="chat-form" id="chatForm" autocomplete="off">
+      <label for="chatInput" class="sr-only">Votre message</label>
+      <input id="chatInput" type="text" placeholder="Posez votre question…" maxlength="300">
+      <button type="submit" aria-label="Envoyer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <script>
+  (() => {
+    "use strict";
+
+    /* =======================================================
+       CONFIGURATION — nom de l'agence [À REMPLACER]
+       ======================================================= */
+    const AGENCY_NAME = "Maison Aurore";
+    document.querySelectorAll("[data-agency]").forEach(el => { el.textContent = AGENCY_NAME; });
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* =======================================================
+       1. Animation d'entrée du hero (cascade au chargement)
+       ======================================================= */
+    requestAnimationFrame(() => document.body.classList.add("is-loaded"));
+
+    /* =======================================================
+       2. Barre de progression + header au scroll
+       ======================================================= */
+    const progress = document.getElementById("scrollProgress");
+    const header = document.getElementById("header");
+    let ticking = false;
+
+    function onScroll() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = max > 0 ? window.scrollY / max : 0;
+      progress.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
+      header.classList.toggle("is-scrolled", window.scrollY > 10);
+      ticking = false;
+    }
+    window.addEventListener("scroll", () => {
+      if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+    }, { passive: true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
+
+    /* =======================================================
+       3. Menu mobile
+       ======================================================= */
+    const navToggle = document.getElementById("navToggle");
+    const nav = document.getElementById("nav");
+
+    function setNav(open) {
+      nav.classList.toggle("is-open", open);
+      navToggle.setAttribute("aria-expanded", String(open));
+      navToggle.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
+    }
+    navToggle.addEventListener("click", () => setNav(!nav.classList.contains("is-open")));
+    nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setNav(false)));
+
+    /* =======================================================
+       4. Apparitions au scroll + compteurs animés
+       ======================================================= */
+    const formatNumber = n => n.toLocaleString("fr-FR");
+
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.target, 10);
+      const prefix = el.dataset.prefix || "";
+      if (prefersReducedMotion) { el.textContent = prefix + formatNumber(target); return; }
+
+      const duration = 1800;
+      const start = performance.now();
+      const easeOut = t => 1 - Math.pow(1 - t, 3);
+
+      (function frame(now) {
+        const t = Math.min(1, (now - start) / duration);
+        el.textContent = prefix + formatNumber(Math.round(target * easeOut(t)));
+        if (t < 1) requestAnimationFrame(frame);
+      })(start);
+    }
+
+    if ("IntersectionObserver" in window) {
+      const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          entry.target.querySelectorAll(".counter").forEach(animateCounter);
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.18, rootMargin: "0px 0px -40px 0px" });
+
+      document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+    } else {
+      // Navigateurs anciens : tout afficher directement
+      document.querySelectorAll(".reveal").forEach(el => el.classList.add("is-visible"));
+      document.querySelectorAll(".counter").forEach(el => {
+        el.textContent = (el.dataset.prefix || "") + formatNumber(+el.dataset.target);
+      });
+    }
+
+    /* =======================================================
+       5. Formulaire de contact (validation + confirmation)
+       ======================================================= */
+    const form = document.getElementById("contactForm");
+    const success = document.getElementById("formSuccess");
+    const submitBtn = document.getElementById("submitBtn");
+    const btnLabel = submitBtn.querySelector(".btn-label");
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    const rules = {
+      name:    v => v.trim().length >= 2,
+      email:   v => emailRe.test(v.trim()),
+      message: v => v.trim().length >= 10
+    };
+
+    function validateField(input) {
+      const ok = rules[input.name](input.value);
+      const field = input.closest(".field");
+      field.classList.toggle("has-error", !ok);
+      input.setAttribute("aria-invalid", String(!ok));
+      if (!ok) input.setAttribute("aria-describedby", input.id + "-error");
+      else input.removeAttribute("aria-describedby");
+      return ok;
+    }
+
+    // Validation en direct après une première erreur
+    form.querySelectorAll("input, textarea").forEach(input => {
+      input.addEventListener("input", () => {
+        if (input.closest(".field").classList.contains("has-error")) validateField(input);
+      });
+      input.addEventListener("blur", () => { if (input.value) validateField(input); });
+    });
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const inputs = [...form.querySelectorAll("input, textarea")];
+      const results = inputs.map(validateField);
+      if (results.includes(false)) {
+        inputs[results.indexOf(false)].focus();
+        return;
+      }
+
+      // Simulation d'envoi (à brancher sur votre back-end / service d'e-mail)
+      submitBtn.classList.add("is-loading");
+      submitBtn.setAttribute("aria-busy", "true");
+      btnLabel.textContent = "Envoi en cours…";
+      submitBtn.querySelector("svg").outerHTML = '<span class="spinner" aria-hidden="true"></span>';
+
+      setTimeout(() => {
+        const firstName = document.getElementById("name").value.trim().split(/\s+/)[0];
+        document.getElementById("successName").textContent = firstName;
+        success.classList.add("is-visible");
+        form.setAttribute("aria-hidden", "true");
+        document.getElementById("resetForm").focus();
+      }, prefersReducedMotion ? 300 : 1100);
+    });
+
+    document.getElementById("resetForm").addEventListener("click", () => {
+      form.reset();
+      form.removeAttribute("aria-hidden");
+      success.classList.remove("is-visible");
+      submitBtn.classList.remove("is-loading");
+      submitBtn.removeAttribute("aria-busy");
+      btnLabel.textContent = "Envoyer ma demande";
+      submitBtn.querySelector(".spinner").outerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>';
+      document.getElementById("name").focus();
+    });
+
+    /* =======================================================
+       6. Chatbot — réponses scriptées
+       Chaque intention : liste de mots-clés (sans accents) + réponse.
+       ======================================================= */
+    const INTENTS = [
+      {
+        keys: ["horaire", "ouvert", "ouverture", "fermer", "ferme", "heure", "samedi", "dimanche"],
+        reply: "Notre agence vous accueille :\n• du lundi au vendredi de 9h à 19h\n• le samedi de 10h à 17h\nLe dimanche, nous organisons des visites sur rendez-vous uniquement. 😊"
+      },
+      {
+        keys: ["estim", "evalu", "combien vaut", "valeur", "prix de mon", "vaut mon"],
+        reply: "Avec plaisir ! Notre estimation est gratuite et sans engagement.\n1. Un conseiller visite votre bien (environ 45 min).\n2. Vous recevez un rapport détaillé sous 48 h, basé sur les ventes réelles du quartier.\n👉 <a href=\"#contact\" data-close>Demandez votre estimation ici</a>."
+      },
+      {
+        keys: ["rdv", "rendez", "visite", "visiter", "rencontrer", "disponib", "creneau"],
+        reply: "Prenons rendez-vous ! Vous pouvez :\n• nous appeler au <a href=\"tel:+33100000000\">01 00 00 00 00</a>\n• ou <a href=\"#contact\" data-close>remplir le formulaire</a> en indiquant vos disponibilités.\nUn conseiller vous confirme le créneau sous 24 h ouvrées."
+      },
+      {
+        keys: ["honorair", "frais", "commission", "tarif", "pourcentage", "cout"],
+        reply: "Nos honoraires sont dégressifs selon le prix de vente et à la charge de l'acquéreur ou du vendeur selon le mandat. Le barème complet est affiché en agence et disponible sur simple demande. L'estimation, elle, est toujours gratuite."
+      },
+      {
+        keys: ["acheter", "achat", "cherche", "recherche", "trouver", "acquerir", "budget"],
+        reply: "Notre service Recherche s'occupe de tout : vous nous donnez vos critères (secteur, surface, budget), nous sélectionnons pour vous — y compris des biens off-market jamais publiés. Voulez-vous <a href=\"#contact\" data-close>nous décrire votre projet</a> ?"
+      },
+      {
+        keys: ["vendre", "vente", "mandat", "exclusif", "exclusivite"],
+        reply: "Pour vendre, nous proposons une estimation précise, un home staging, une visite virtuelle et une diffusion ciblée auprès d'acquéreurs déjà financés. Notre délai moyen de vente est de 47 jours. Souhaitez-vous commencer par une estimation ?"
+      },
+      {
+        keys: ["louer", "location", "locataire", "loyer", "gestion"],
+        reply: "Nous sommes spécialisés dans la transaction (vente et achat). Pour la location ou la gestion locative, nous pouvons vous orienter vers un partenaire de confiance : <a href=\"#contact\" data-close>laissez-nous vos coordonnées</a>."
+      },
+      {
+        keys: ["bien", "annonce", "appartement", "maison", "villa", "longere", "disponible"],
+        reply: "Découvrez nos biens en vedette : un haussmannien de 112 m², une villa contemporaine avec piscine et une longère en pierre. 👉 <a href=\"#biens\" data-close>Voir la sélection</a>. D'autres biens sont disponibles en agence."
+      },
+      {
+        keys: ["adresse", "ou etes", "situe", "trouver l'agence", "venir", "parking"],
+        reply: "Vous nous trouverez au 12 place du Marché, 00000 Votre Ville. Un parking public se trouve à 2 minutes à pied."
+      },
+      {
+        keys: ["telephone", "appeler", "numero", "mail", "email", "contact", "joindre"],
+        reply: "Vous pouvez nous joindre :\n📞 <a href=\"tel:+33100000000\">01 00 00 00 00</a>\n✉️ <a href=\"mailto:contact@exemple.fr\">contact@exemple.fr</a>\nou via le <a href=\"#contact\" data-close>formulaire de contact</a>."
+      },
+      {
+        keys: ["credit", "pret", "financement", "banque", "courtier", "emprunt"],
+        reply: "Nous travaillons avec des courtiers partenaires qui peuvent étudier votre capacité d'emprunt gratuitement. Indiquez-le dans votre message et nous vous mettons en relation."
+      },
+      {
+        keys: ["bonjour", "salut", "hello", "bonsoir", "coucou"],
+        reply: "Bonjour ! 👋 Comment puis-je vous aider aujourd'hui ? Estimation, achat, vente ou prise de rendez-vous ?"
+      },
+      {
+        keys: ["merci", "parfait", "super", "genial", "top"],
+        reply: "Avec plaisir ! N'hésitez pas si vous avez d'autres questions. Belle journée ✨"
+      },
+      {
+        keys: ["au revoir", "bye", "a bientot", "bonne journee"],
+        reply: "À très bientôt ! Toute l'équipe reste à votre disposition."
+      }
+    ];
+
+    const FALLBACK =
+      "Je ne suis pas certain de bien comprendre 🤔 Je peux vous renseigner sur nos horaires, une estimation, la prise de rendez-vous, nos honoraires ou nos biens. Pour une question plus précise, un conseiller vous répond via le <a href=\"#contact\" data-close>formulaire de contact</a>.";
+
+    // Normalise : minuscules + suppression des accents
+    const normalize = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+    function findReply(text) {
+      const q = normalize(text);
+      // On retient l'intention ayant le plus de mots-clés correspondants
+      let best = null, bestScore = 0;
+      for (const intent of INTENTS) {
+        const score = intent.keys.reduce((acc, k) => acc + (q.includes(k) ? 1 : 0), 0);
+        if (score > bestScore) { best = intent; bestScore = score; }
+      }
+      return best ? best.reply : FALLBACK;
+    }
+
+    const launcher = document.getElementById("chatLauncher");
+    const panel = document.getElementById("chatPanel");
+    const body = document.getElementById("chatBody");
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const badge = document.getElementById("chatBadge");
+    let greeted = false;
+
+    const escapeHTML = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    function addMessage(html, who) {
+      const div = document.createElement("div");
+      div.className = `msg msg--${who}`;
+      div.innerHTML = html;
+      body.appendChild(div);
+      body.scrollTop = body.scrollHeight;
+      return div;
+    }
+
+    function botReply(html) {
+      const typing = addMessage('<span class="typing" aria-label="L\'assistant écrit"><i></i><i></i><i></i></span>', "bot");
+      typing.style.padding = "0";
+      const delay = prefersReducedMotion ? 150 : 650 + Math.min(900, html.length * 4);
+      setTimeout(() => {
+        typing.remove();
+        addMessage(html, "bot");
+      }, delay);
+    }
+
+    function ask(text) {
+      if (!text.trim()) return;
+      addMessage(escapeHTML(text), "user");
+      botReply(findReply(text));
+    }
+
+    function setChat(open) {
+      panel.classList.toggle("is-open", open);
+      panel.setAttribute("aria-hidden", String(!open));
+      launcher.setAttribute("aria-expanded", String(open));
+      launcher.setAttribute("aria-label", open ? "Fermer l'assistant" : "Ouvrir l'assistant");
+      if (open) {
+        badge.style.display = "none";
+        if (!greeted) {
+          greeted = true;
+          botReply(`Bonjour et bienvenue chez ${escapeHTML(AGENCY_NAME)} ! 👋\nJe suis votre assistant. Choisissez une suggestion ci-dessous ou posez-moi directement votre question.`);
+        }
+        setTimeout(() => chatInput.focus({ preventScroll: true }), 250);
+      } else {
+        launcher.focus();
+      }
+    }
+
+    launcher.addEventListener("click", () => setChat(!panel.classList.contains("is-open")));
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && panel.classList.contains("is-open")) setChat(false);
+    });
+
+    document.querySelectorAll("#chatSuggestions .chip").forEach(chip => {
+      chip.addEventListener("click", () => ask(chip.dataset.q));
+    });
+
+    chatForm.addEventListener("submit", e => {
+      e.preventDefault();
+      ask(chatInput.value);
+      chatInput.value = "";
+    });
+
+    // Liens internes dans les réponses : ferment le chat pour dévoiler la section
+    body.addEventListener("click", e => {
+      const link = e.target.closest("a[data-close]");
+      if (link) setChat(false);
+    });
+  })();
+  </script>
+</body>
+</html>
