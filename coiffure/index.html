@@ -59,7 +59,7 @@
 
     /* ===================== BASE ===================== */
     *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; overflow-x: clip; -webkit-text-size-adjust: 100%; }
+    html { scroll-behavior: smooth; overflow-x: clip; -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 16px); scroll-padding-bottom: 96px; }
     body {
       margin: 0; overflow-x: clip;
       background: var(--paper); color: var(--ink);
@@ -121,7 +121,6 @@
     .btn__inner { display: inline-flex; align-items: center; gap: 10px; transition: transform .5s var(--ease-spring); }
     .btn--primary { background: var(--notif); color: var(--white); }
     .btn--primary:hover { background: var(--notif-ink); box-shadow: 0 14px 30px -14px rgba(217, 19, 79, .7); }
-    .btn--primary:focus-visible, .btn--primary *:focus-visible { outline-color: var(--mail); }
     .btn--ghost { background: var(--white); color: var(--ink); border-color: var(--ink); }
     .btn--ghost .ico { transition: transform .18s var(--ease-out); }
     .btn--ghost:hover .ico { transform: translateX(4px); }
@@ -147,7 +146,7 @@
 
     /* Grain (léger bruit de papier, desktop) */
     .grain {
-      position: fixed; inset: 0; z-index: 400; pointer-events: none; opacity: .05; mix-blend-mode: multiply;
+      position: fixed; inset: 0; z-index: 400; pointer-events: none; opacity: .035;
       background-size: 128px 128px;
     }
     @media (max-width: 599px) { .grain { display: none; } }
@@ -170,7 +169,7 @@
 
     .logo {
       display: inline-flex; align-items: flex-end; gap: 0; text-decoration: none; color: var(--ink);
-      font: 800 1.625rem/1 var(--font-display); letter-spacing: -.04em; margin-right: auto;
+      font: 800 1.625rem/1 var(--font-display); letter-spacing: -.04em; margin-right: auto; min-height: 44px; align-items: center;
     }
     .logo__i { position: relative; display: inline-block; }
     .logo-badge {
@@ -230,7 +229,7 @@
     .progress__env .flap { transform-box: fill-box; transform-origin: 50% 0; transition: transform .4s var(--ease-spring); }
     .progress__env.is-done .flap { transform: rotateX(180deg); }
     .progress__chip {
-      position: absolute; right: 22px; top: -4px; padding: 4px 8px; border-radius: 999px; white-space: nowrap;
+      position: absolute; right: 22px; top: 10px; padding: 4px 8px; border-radius: 999px; white-space: nowrap;
       background: var(--ink); color: var(--white); font: 500 .6875rem/1 var(--font-mono);
       transform: scale(.8); opacity: 0; transition: transform .3s var(--ease-spring), opacity .2s;
     }
@@ -310,6 +309,7 @@
       background: var(--mail); border-radius: 3px; transform-origin: left;
     }
     .hero__sub { position: relative; z-index: 0; }
+    @media (min-width: 1024px) and (max-width: 1199px) { .hero__sub { max-width: 36ch; } }
     .hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
     .proof { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; font: 400 .875rem/1 var(--font-mono); color: var(--ink-soft); }
     .avatars { display: flex; }
@@ -380,7 +380,7 @@
     @keyframes notifOut { to { transform: scale(.85); opacity: 0; } }
 
     /* Nuancier (essai de couleur) */
-    .nuancier { position: absolute; right: -34px; bottom: 12%; z-index: 4; display: grid; justify-items: center; gap: 6px; }
+    .nuancier { position: absolute; right: max(-34px, calc(16px - clamp(16px, 4vw, 48px))); bottom: 12%; z-index: 4; display: grid; justify-items: center; gap: 6px; }
     .nuancier__fan { position: relative; width: 120px; height: 112px; transform-origin: 50% 100%; animation: pendulum 3.4s ease-in-out infinite alternate; }
     @keyframes pendulum { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
     .swatch {
@@ -388,19 +388,18 @@
       transform-origin: 50% 100%; transform: rotate(var(--rot)); background: none;
       transition: transform .4s var(--ease-spring);
     }
-    .swatch::before { content: ""; position: absolute; inset: -9px; }
     .swatch span {
       position: absolute; inset: 0; border-radius: 13px 13px 6px 6px; background: var(--g);
       box-shadow: inset 4px 0 0 rgba(255, 255, 255, .45), 0 6px 12px -6px rgba(42, 19, 64, .4);
     }
-    .swatch[aria-pressed="true"], .swatch:hover { transform: rotate(var(--rot)) translateY(-8px); }
+    .swatch[aria-pressed="true"], .swatch:hover, .swatch:focus-visible { transform: rotate(var(--rot)) translateY(-8px); z-index: 2; }
     .swatch[aria-pressed="true"] span { outline: 2px solid var(--white); outline-offset: 1px; }
     .nuancier__ring { position: absolute; left: 50%; bottom: 0; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; border: 3px solid var(--ink-soft); background: var(--paper); }
     .nuancier__chip { padding: 7px 12px; border-radius: 999px; background: var(--white); font: 400 .75rem/1 var(--font-mono); white-space: nowrap; box-shadow: var(--shadow-float); }
     .nuancier-row { display: none; }
 
     .pause-btn {
-      display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 999px;
       background: var(--white); border: 1px solid rgba(42, 19, 64, .1); color: var(--ink); cursor: pointer;
       font: 400 .75rem/1 var(--font-mono);
     }
@@ -409,6 +408,7 @@
     html.is-paused .pause-btn .i-play { display: block; }
     html.is-paused .pause-btn .i-pause { display: none; }
     .hero__pause { position: relative; z-index: 2; margin-top: 18px; }
+    .hero__visual .hero__pause { display: none; }
 
     @media (max-width: 1023px) {
       .hero__grid { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 36px; }
@@ -416,6 +416,8 @@
       .hero__visual { justify-self: center; width: min(100%, 480px); }
       .notif-stack { position: relative; left: auto; top: auto; width: 92%; margin: -48px auto 0; }
       .nuancier { display: none; }
+      .hero__copy .hero__pause { display: none; }
+      .hero__visual .hero__pause { display: inline-flex; }
       .nuancier-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; }
       .nuancier-row p { margin: 0 6px 0 0; font: 400 .8125rem/1 var(--font-mono); color: var(--ink-soft); }
       .chip-color {
@@ -435,6 +437,12 @@
       .notif-stack li:nth-child(n+3) { display: none; }
       .blob--mint { display: none; }
       .blob { width: 80vw; height: 80vw; }
+      .blob--pop { opacity: .38; }
+      .hero { padding-top: 16px; }
+      .eyebrow { margin-bottom: 16px; }
+      .hero__sub { margin-bottom: 22px; }
+      .hero__ctas { margin-bottom: 20px; gap: 10px; }
+      .hero__grid { gap: 28px; }
     }
 
     /* ===================== EN BREF (stats) + RUBANS ===================== */
@@ -522,6 +530,9 @@
     @keyframes flash { 0%, 60% { background: #FFF1B8; } 100% { background: transparent; } }
     .inbox-list li[hidden] { display: none; }
     .services__note { margin-top: 24px; font: 400 .8125rem/1.5 var(--font-mono); color: var(--ink-soft); }
+    @media (max-width: 599px) {
+      .row__preview { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
+    }
     @media (max-width: 899px) {
       .inbox-list { grid-template-columns: minmax(0, 1fr); }
       .row { grid-template-columns: 8px 40px minmax(0, 1fr) auto; gap: 12px; padding: 12px 8px; }
@@ -550,6 +561,8 @@
     .ba__tag--before { left: 16px; background: var(--white); color: var(--ink); }
     .ba__tag--after { right: 16px; background: var(--notif); color: var(--white); }
     .ba__range { position: absolute; inset: 0; z-index: 4; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; -webkit-appearance: none; appearance: none; touch-action: pan-y; }
+    .ba__stage { touch-action: pan-y; }
+    @media (pointer: coarse) { .ba__range { pointer-events: none; } }
     .ba figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 16px 4px 0; }
     .ba figcaption strong { font-weight: 700; }
     .ba figcaption span { font: 400 .8125rem/1.5 var(--font-mono); color: var(--ink-soft); }
@@ -561,9 +574,9 @@
       transition: border-color .2s, transform .25s var(--ease-spring);
     }
     .attach:hover { transform: translateX(4px); }
-    .attach[aria-selected="true"] { border-color: var(--notif); }
+    .attach[aria-pressed="true"] { border-color: var(--notif); }
     .attach .ico { transition: transform .4s var(--ease-spring); }
-    .attach[aria-selected="true"] .ico { color: var(--notif); animation: clip .5s var(--ease-spring); }
+    .attach[aria-pressed="true"] .ico { color: var(--notif); animation: clip .5s var(--ease-spring); }
     @keyframes clip { from { transform: rotate(-20deg); } }
     .attach__name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .attach__size { font: 400 .75rem/1 var(--font-mono); color: var(--ink-soft); white-space: nowrap; }
@@ -571,7 +584,7 @@
     @media (max-width: 1023px) {
       .gallery__grid { grid-template-columns: minmax(0, 1fr); }
       .ba__stage { aspect-ratio: 4 / 5; }
-      .attachments { grid-auto-flow: column; grid-auto-columns: minmax(240px, 72%); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+      .attachments { grid-auto-flow: column; grid-auto-columns: minmax(240px, 72%); overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 6px 10px; margin: -6px; scroll-padding-inline: 6px; }
       .attachments p { display: none; }
       .attach { scroll-snap-align: start; }
     }
@@ -586,6 +599,8 @@
     .member:nth-child(2) { transform: translateY(48px); }
     .member:nth-child(3) { transform: translateY(16px); }
     .member__top { display: flex; align-items: center; gap: 16px; }
+    .member__top > div:last-child { min-width: 0; }
+    .member h3, .member__status { white-space: nowrap; }
     .member__avatar { position: relative; width: 120px; height: 120px; flex: none; border-radius: 50%; overflow: visible; }
     .member__avatar .slot { width: 120px; height: 120px; border-radius: 50%; }
     .member__avatar .online { position: absolute; right: 8px; bottom: 8px; width: 18px; height: 18px; border-radius: 50%; background: var(--mint); border: 3px solid var(--white); animation: breathe 2s ease-in-out infinite alternate; }
@@ -614,8 +629,12 @@
     .member__link { color: var(--notif-ink); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; background: none; border: 0; padding: 0; cursor: pointer; justify-self: start; }
     .member__link .ico { width: 18px; height: 18px; transition: transform .2s var(--ease-out); }
     .member__link:hover .ico { transform: translateX(4px); }
+    @media (max-width: 1100px) {
+      .member__avatar, .member__avatar .slot { width: 88px; height: 88px; }
+      .member__avatar .online { right: 2px; bottom: 2px; }
+    }
     @media (max-width: 1023px) {
-      .team__grid { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(280px, 82%); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; }
+      .team__grid { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: min(86%, 360px); overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 6px 14px; margin: -6px; scroll-padding-inline: 6px; }
       .member { scroll-snap-align: start; }
       .member:nth-child(n) { transform: none; }
     }
@@ -624,7 +643,7 @@
     .review { background: var(--mail); }
     .review__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
     .review .label { color: var(--ink); }
-    .big-score { display: flex; align-items: center; gap: 16px; font: 800 clamp(4.5rem, 3rem + 6vw, 9rem)/.9 var(--font-display); letter-spacing: -.06em; }
+    .big-score { margin: 0; display: flex; align-items: center; gap: 16px; font: 800 clamp(4.5rem, 3rem + 6vw, 9rem)/.9 var(--font-display); letter-spacing: -.06em; }
     .big-score .ico { width: .6em; height: .6em; fill: var(--notif); stroke: none; }
     .review__meta { font: 400 .875rem/1.5 var(--font-mono); color: var(--ink-soft); margin-top: 12px; }
     .thread { display: grid; gap: 16px; }
@@ -658,6 +677,9 @@
     .booking__blob { position: absolute; right: -10vw; top: 10%; width: 60vmax; height: 60vmax; border-radius: 50%; opacity: .35; background: radial-gradient(circle, var(--pop) 0%, transparent 65%); pointer-events: none; }
     .booking__grid { position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
     .booking__aside p { color: var(--ink-soft); max-width: 44ch; }
+    #rdv-title { max-width: none; font-size: clamp(1.9rem, .6rem + 2.6vw, 3.4rem); }
+    #rdv-title .nw { white-space: nowrap; }
+    @media (max-width: 899px) { #rdv-title { font-size: clamp(1.9rem, 1rem + 3.2vw, 3.4rem); } }
     .hours-mini { list-style: none; margin: 24px 0; padding: 0; display: grid; gap: 6px; font: 400 .875rem/1.5 var(--font-mono); }
     .hours-mini li { display: flex; justify-content: space-between; gap: 16px; max-width: 340px; border-bottom: 1px dashed rgba(42, 19, 64, .15); padding-bottom: 6px; }
     .hours-mini li.is-today { color: var(--notif-ink); font-weight: 500; }
@@ -715,7 +737,8 @@
     .pill input:disabled + span { opacity: .4; text-decoration: line-through; }
     .submit-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
     .submit-row .hint { max-width: 32ch; }
-    .compose.is-folding { animation: fold .45s var(--ease-inout) forwards; }
+    html .compose.is-folding, html:not(.is-paused) .compose.is-folding[data-reveal] { animation: fold .45s var(--ease-inout) forwards; animation-timeline: auto; pointer-events: none; }
+    #compose { scroll-margin-top: calc(var(--header-h) + 16px); }
     @keyframes fold { to { transform: scale(.55); border-radius: 24px; opacity: 0; } }
     .confirm { display: none; padding: 32px 24px 28px; }
     .compose.is-sent #booking-form, .compose.is-sent .compose__head { display: none; }
@@ -733,14 +756,14 @@
       #booking-form { padding: 18px 16px 22px; }
       .compose__head, .compose__bar { padding-left: 16px; padding-right: 16px; }
       .submit-row .btn { width: 100%; }
-      .pills.days { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+      .pills.days { flex-wrap: nowrap; overflow-x: auto; padding: 6px 6px 8px; margin: -6px; scroll-padding-inline: 6px; scroll-snap-type: x mandatory; }
       .pills.days .pill { scroll-snap-align: start; }
     }
 
     /* ===================== FOOTER ===================== */
     .site-footer { position: relative; background: var(--unread); color: var(--white); padding-block: clamp(72px, 9vw, 120px) calc(96px + env(safe-area-inset-bottom, 0px)); margin-top: 40px; }
     .site-footer :focus-visible { outline-color: var(--mail); }
-    .site-footer a { color: var(--white); }
+    .site-footer a:not(.btn) { color: var(--white); }
     .footer-wave { position: absolute; left: 0; right: 0; top: -39px; height: 40px; width: 100%; }
     .site-footer h2 { color: var(--white); margin-bottom: 40px; }
     .footer-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
@@ -748,7 +771,7 @@
     .hours { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 4px; font-variant-numeric: tabular-nums; }
     .hours li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 12px; border-radius: 10px; }
     .hours li span:first-child { color: var(--footer-soft); }
-    .hours li.is-today { background: rgba(255, 255, 255, .14); font-weight: 700; }
+    .hours li.is-today { background: rgba(42, 19, 64, .18); font-weight: 700; }
     .hours li.is-today span:first-child { color: var(--white); }
     .status-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--paper); color: var(--ink); font-weight: 600; font-size: .9375rem; }
     .status-chip i { width: 9px; height: 9px; border-radius: 50%; background: var(--mail); animation: breathe 2s ease-in-out infinite alternate; }
@@ -779,11 +802,14 @@
       position: fixed; right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(96px + env(safe-area-inset-bottom, 0px)); z-index: 160;
       max-width: min(340px, calc(100vw - 32px)); display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; align-items: start;
       padding: 14px 16px; border-radius: 22px; background: var(--white); box-shadow: var(--shadow-float); border: 1px solid rgba(42, 19, 64, .07);
-      transform: translateY(16px); opacity: 0; pointer-events: none; transition: transform .4s var(--ease-spring), opacity .25s;
+      transform: translateY(16px); opacity: 0; pointer-events: none; visibility: hidden; transition: transform .4s var(--ease-spring), opacity .25s, visibility 0s linear .4s;
     }
-    .toast.is-visible { transform: none; opacity: 1; pointer-events: auto; }
+    .toast.is-visible { transform: none; opacity: 1; pointer-events: auto; visibility: visible; transition-delay: 0s; }
+    .toast__close { position: absolute; top: 6px; right: 6px; width: 44px; height: 44px; border: 0; background: none; border-radius: 50%; cursor: pointer; display: grid; place-items: center; color: var(--ink-soft); }
+    .toast__close .ico { width: 18px; height: 18px; }
+    .toast > div { padding-right: 28px; }
     .toast p { margin: 0 0 6px; font-weight: 600; line-height: 1.35; }
-    .toast a { font-weight: 700; color: var(--notif-ink); }
+    .toast a { font-weight: 700; color: var(--notif-ink); display: inline-flex; align-items: center; min-height: 44px; }
 
     /* ===================== CHATBOT « BOX » ===================== */
     .chat-launcher {
@@ -802,15 +828,16 @@
     .chat-launcher.seen .badge { display: none; }
     .chat-launcher.wiggle { animation: wiggle .6s var(--ease-inout); }
     @keyframes wiggle { 20% { transform: rotate(8deg); } 40% { transform: rotate(-8deg); } 60% { transform: rotate(6deg); } 80% { transform: rotate(-4deg); } }
-    .chat-launcher.is-away { transform: translateY(140%); }
+    .chat-launcher.is-away { transform: translateY(140%); visibility: hidden; transition: transform .3s var(--ease-out), visibility 0s .3s; }
+    .chat-launcher.is-away.wiggle { animation: none; }
     .chat-preview {
       position: fixed; right: calc(92px + env(safe-area-inset-right, 0px)); bottom: calc(28px + env(safe-area-inset-bottom, 0px)); z-index: 165;
       display: flex; align-items: center; gap: 8px; max-width: 260px; padding: 10px 8px 10px 14px; border-radius: 18px 18px 6px 18px;
       background: var(--white); color: var(--ink); box-shadow: var(--shadow-float); font-size: .9375rem; line-height: 1.35;
-      transform: translateX(12px); opacity: 0; pointer-events: none; transition: transform .32s var(--ease-out), opacity .25s;
+      transform: translateX(12px); opacity: 0; pointer-events: none; visibility: hidden; transition: transform .32s var(--ease-out), opacity .25s, visibility 0s linear .32s;
     }
-    .chat-preview.is-visible { transform: none; opacity: 1; pointer-events: auto; }
-    .chat-preview button { width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--paper); cursor: pointer; display: grid; place-items: center; flex: none; }
+    .chat-preview.is-visible { transform: none; opacity: 1; pointer-events: auto; visibility: visible; transition-delay: 0s; }
+    .chat-preview button { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--paper); cursor: pointer; display: grid; place-items: center; flex: none; }
     .chat-preview button .ico { width: 16px; height: 16px; }
     .chat-panel {
       position: fixed; right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 170;
@@ -826,7 +853,7 @@
     .chat-head strong { display: block; font-weight: 700; }
     .chat-head small { display: inline-flex; align-items: center; gap: 6px; font: 400 .75rem/1 var(--font-mono); opacity: .95; }
     .chat-head small::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--mint); }
-    .chat-close { margin-left: auto; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .16); color: var(--white); cursor: pointer; display: grid; place-items: center; }
+    .chat-close { margin-left: auto; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .16); color: var(--white); cursor: pointer; display: grid; place-items: center; }
     .chat-close:focus-visible { outline-color: var(--mail); }
     .chat-log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; overscroll-behavior: contain; }
     .msg { max-width: 88%; display: grid; gap: 4px; animation: msgIn .26s var(--ease-out) both; }
@@ -837,7 +864,7 @@
     .msg.bot .msg__b { background: var(--white); border-radius: 20px 20px 20px 6px; }
     .msg.user { align-self: flex-end; justify-items: end; }
     .msg.user .msg__b { background: var(--notif); color: var(--white); border-radius: 20px 20px 6px 20px; }
-    .msg .act { margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--notif-ink); background: none; color: var(--notif-ink); font-weight: 700; font-size: .875rem; cursor: pointer; }
+    .msg .act { margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--notif-ink); background: none; color: var(--notif-ink); font-weight: 700; font-size: .875rem; cursor: pointer; }
     .msg .act:hover { background: var(--notif); border-color: var(--notif); color: var(--white); }
     .msg .typing { background: var(--white); }
     @keyframes msgIn { from { transform: translateY(8px) scale(.92); opacity: 0; } }
@@ -856,7 +883,7 @@
         transition: transform .42s var(--ease-out), visibility 0s .42s;
       }
       .chat-panel.is-open { transform: none; transition: transform .42s var(--ease-out), visibility 0s; }
-      body.chat-open .chat-launcher, body.menu-open .chat-launcher { transform: translateY(160%); }
+      body.chat-open .chat-launcher, body.menu-open .chat-launcher { transform: translateY(160%); visibility: hidden; }
       .chat-preview { display: none; }
       .toast { left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(88px + env(safe-area-inset-bottom, 0px)); max-width: none; }
     }
@@ -904,6 +931,11 @@
       .row .unread { transform: scale(0); }
     }
     html.is-paused *, html.is-paused *::before, html.is-paused *::after { animation-play-state: paused !important; }
+    html.is-paused { scroll-behavior: auto; }
+    html.is-paused .msg, html.is-paused .stars--sweep .ico, html.is-paused .reply__bubble, html.is-paused .confirm,
+    html.is-paused .quote, html.is-paused .field, html.is-paused .field select, html.is-paused .row, html.is-paused .chat-launcher,
+    html.is-paused .sheet-row, html.is-paused .notif-stack li, html.is-paused .attach .ico, html.is-paused .stat .app-tile,
+    html.is-paused .logo-badge, html.is-paused .compose { animation: none !important; }
 
   </style>
   <script>
@@ -996,7 +1028,7 @@
     </div>
   </header>
 
-  <div class="menu-sheet" id="menu-sheet" aria-label="Menu" hidden>
+  <nav class="menu-sheet" id="menu-sheet" aria-label="Menu" hidden>
     <a class="sheet-row" href="#prestations" style="--i:0">Prestations <span class="mono">11</span></a>
     <a class="sheet-row" href="#realisations" style="--i:1">Réalisations <span class="mono">4</span></a>
     <a class="sheet-row" href="#equipe" style="--i:2">Équipe <span class="mono">3</span></a>
@@ -1008,7 +1040,7 @@
       <span class="mono">Tél. 04 65 71 28 41</span>
       <button class="pause-btn" type="button" data-pause><svg class="ico i-pause"><use href="#i-pause"/></svg><svg class="ico i-play"><use href="#i-play"/></svg><span data-pause-label>Pause animations</span></button>
     </div>
-  </div>
+  </nav>
 
   <main id="main">
     <!-- ===================== 2. HERO ===================== -->
@@ -1026,16 +1058,13 @@
           </h1>
           <p class="hero__sub">Coupe, couleur, soin&#8239;: chez Inbox, on lit vos envies entre les mèches et <span class="hl">on y répond en beauté</span>. Salon mixte à Lyon 1er, depuis 2014.</p>
           <div class="hero__ctas">
-            <a class="btn btn--primary magnetic" href="#rdv"><span class="btn__inner">Prendre RDV</span><span class="badge" aria-hidden="true">3</span><span class="tooltip" data-slots-tip>3 créneaux libres aujourd'hui</span></a>
+            <a class="btn btn--primary magnetic" href="#rdv"><span class="btn__inner">Prendre RDV</span><span class="badge" aria-hidden="true" id="cta-badge">3</span><span class="tooltip" data-slots-tip>3 créneaux libres aujourd'hui</span></a>
             <a class="btn btn--ghost" href="#prestations"><span class="btn__inner">Voir les prestations <svg class="ico"><use href="#i-arrow"/></svg></span></a>
           </div>
           <div class="proof">
             <span class="avatars" aria-hidden="true" id="proof-avatars"><span></span><span></span><span></span></span>
             <span class="stars" role="img" aria-label="Note 4,9 sur 5"><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg></span>
             <span>4,9/5 · 412 avis Google</span>
-          </div>
-          <div class="nuancier-row" role="group" aria-label="Essayez une couleur">
-            <p>Essayez une couleur&#8239;:</p>
           </div>
           <button class="pause-btn hero__pause" type="button" data-pause><svg class="ico i-pause"><use href="#i-pause"/></svg><svg class="ico i-play"><use href="#i-play"/></svg><span data-pause-label>Pause animations</span></button>
         </div>
@@ -1066,9 +1095,14 @@
 
           <ul class="notif-stack" id="notif-stack" aria-label="Notifications du salon">
             <li style="--n:0"><button class="notif" type="button" data-notif="slot"><span class="app-tile tile-cool"><svg class="ico"><use href="#i-cal"/></svg></span><span class="notif__txt"><span class="notif__title">Créneau libéré</span><span class="notif__body">Samedi 14:00 avec Hugo · coupe homme</span></span><span class="notif__time">il y a 2&#8239;min</span></button></li>
-            <li style="--n:1"><button class="notif" type="button" data-notif="review"><span class="app-tile tile-sun"><svg class="ico"><use href="#i-star"/></svg></span><span class="notif__txt"><span class="notif__title">Nouvel avis 5/5</span><span class="notif__body">Camille&#8239;: « mes collègues pensent que je rentre de vacances »</span></span><span class="notif__time">il y a 9&#8239;min</span></button></li>
+            <li style="--n:1"><button class="notif" type="button" data-notif="review"><span class="app-tile tile-sun"><svg class="ico"><use href="#i-star"/></svg></span><span class="notif__txt"><span class="notif__title">Nouvel avis 5/5</span><span class="notif__body">Camille&#8239;: «&#8239;mes collègues pensent que je rentre de vacances&#8239;»</span></span><span class="notif__time">il y a 9&#8239;min</span></button></li>
             <li style="--n:2"><button class="notif" type="button" data-notif="gloss"><span class="app-tile tile-warm"><svg class="ico"><use href="#i-gloss"/></svg></span><span class="notif__txt"><span class="notif__title">Nouveau à la carte</span><span class="notif__body">Gloss couleur express · 30&#8239;min · 35&#8239;€</span></span><span class="notif__time">il y a 14&#8239;min</span></button></li>
           </ul>
+
+          <div class="nuancier-row" role="group" aria-label="Essayez une couleur">
+            <p>Essayez une couleur&#8239;:</p>
+          </div>
+          <button class="pause-btn hero__pause" type="button" data-pause><svg class="ico i-pause"><use href="#i-pause"/></svg><svg class="ico i-play"><use href="#i-play"/></svg><span data-pause-label>Pause animations</span></button>
 
           <div class="nuancier" role="group" aria-label="Essayez une couleur">
             <div class="nuancier__fan" id="nuancier-fan"><span class="nuancier__ring" aria-hidden="true"></span></div>
@@ -1168,7 +1202,7 @@
             </div>
             <figcaption><strong id="ba-caption">Camille · balayage caramel</strong><span id="ba-meta">2&#8239;h&#8239;30 avec Sarah · Glissez pour voir l'après</span></figcaption>
           </figure>
-          <div class="attachments" role="tablist" aria-label="Choisir une transformation" data-reveal style="--i:1">
+          <div class="attachments" role="group" aria-label="Choisir une transformation" data-reveal style="--i:1">
             <p>Choisissez une pièce jointe&#8239;:</p>
           </div>
         </div>
@@ -1188,7 +1222,7 @@
               <div class="member__avatar"><figure class="slot" data-portrait="sarah"></figure><span class="online" aria-hidden="true"></span></div>
               <div><h3>Sarah Benali</h3><p class="member__role">Coloriste · balayages &amp; blonds</p><span class="member__status">dispo jeudi</span></div>
             </div>
-            <div class="quote-wrap"><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="quote">« La bonne couleur, c'est celle qu'on oublie&#8239;: on remarque juste votre mine. »</p></div>
+            <div class="quote-wrap"><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="quote">«&#8239;La bonne couleur, c'est celle qu'on oublie&#8239;: on remarque juste votre mine.&#8239;»</p></div>
             <button class="member__link" type="button" data-with="Sarah">Réserver avec Sarah <svg class="ico"><use href="#i-arrow"/></svg></button>
           </article>
           <article class="member" data-member="Inès" data-reveal style="--i:1">
@@ -1196,7 +1230,7 @@
               <div class="member__avatar"><figure class="slot" data-portrait="ines"></figure><span class="online" aria-hidden="true"></span></div>
               <div><h3>Inès Moreau</h3><p class="member__role">Coupe femme · boucles &amp; mariages</p><span class="member__status">dispo samedi</span></div>
             </div>
-            <div class="quote-wrap"><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="quote">« Les boucles, c'est ma langue maternelle. »</p></div>
+            <div class="quote-wrap"><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="quote">«&#8239;Les boucles, c'est ma langue maternelle.&#8239;»</p></div>
             <button class="member__link" type="button" data-with="Inès">Réserver avec Inès <svg class="ico"><use href="#i-arrow"/></svg></button>
           </article>
           <article class="member" data-member="Hugo" data-reveal style="--i:2">
@@ -1204,7 +1238,7 @@
               <div class="member__avatar"><figure class="slot" data-portrait="hugo"></figure><span class="online" aria-hidden="true"></span></div>
               <div><h3>Hugo Martin</h3><p class="member__role">Coupe homme · dégradés &amp; barbe</p><span class="member__status">dispo mercredi</span></div>
             </div>
-            <div class="quote-wrap"><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="quote">« Un dégradé net, ça se joue au millimètre près. »</p></div>
+            <div class="quote-wrap"><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="quote">«&#8239;Un dégradé net, ça se joue au millimètre près.&#8239;»</p></div>
             <button class="member__link" type="button" data-with="Hugo">Réserver avec Hugo <svg class="ico"><use href="#i-arrow"/></svg></button>
           </article>
         </div>
@@ -1217,18 +1251,18 @@
         <div data-reveal="left">
           <p class="label">Message favori</p>
           <h2 id="avis-title" class="visually-hidden">Avis de nos clientes</h2>
-          <p class="big-score" aria-label="Note 5 sur 5 pour cet avis"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg><span aria-hidden="true">5,0</span></p>
+          <p class="big-score"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg><span aria-hidden="true">5,0</span><span class="visually-hidden">Note de cet avis&#8239;: 5 sur 5</span></p>
           <p class="review__meta">4,9/5 sur 412 avis Google</p>
         </div>
         <div class="thread" id="thread" data-reveal style="--i:1">
           <figure class="bubble-client" style="margin:0">
             <span class="stars stars--sweep" role="img" aria-label="5 étoiles sur 5"><svg class="ico" style="--i:0"><use href="#i-star"/></svg><svg class="ico" style="--i:1"><use href="#i-star"/></svg><svg class="ico" style="--i:2"><use href="#i-star"/></svg><svg class="ico" style="--i:3"><use href="#i-star"/></svg><svg class="ico" style="--i:4"><use href="#i-star"/></svg></span>
-            <blockquote>« J'avais peur de passer au blond. Sarah m'a fait un balayage tellement naturel que mes collègues pensent que je rentre de vacances. Trois mois après, la couleur tient toujours. »</blockquote>
+            <blockquote>«&#8239;J'avais peur de passer au blond. Sarah m'a fait un balayage tellement naturel que mes collègues pensent que je rentre de vacances. Trois mois après, la couleur tient toujours.&#8239;»</blockquote>
             <figcaption class="who"><span class="av" id="camille-av" aria-hidden="true"></span><span><strong>Camille R.</strong><span>cliente depuis 2019 · 18:40</span></span></figcaption>
           </figure>
           <div class="reply">
             <span class="typing" aria-hidden="true"><i></i><i></i><i></i></span>
-            <p class="reply__bubble" style="margin:0">« Merci Camille&#8239;! On vous garde votre créneau de juin. » <svg class="ico" aria-hidden="true"><use href="#i-smile"/></svg></p>
+            <p class="reply__bubble" style="margin:0">«&#8239;Merci Camille&#8239;! On vous garde votre créneau de juin.&#8239;» <svg class="ico" aria-hidden="true"><use href="#i-smile"/></svg></p>
             <span class="read-receipt"><svg class="ico" aria-hidden="true"><use href="#i-ticks"/></svg>Lu à 18:42</span>
           </div>
         </div>
@@ -1241,7 +1275,7 @@
       <div class="container booking__grid">
         <div class="booking__aside" data-reveal="left">
           <p class="label">Nouveau message</p>
-          <h2 id="rdv-title">Écrivez-nous, on répond vite.</h2>
+          <h2 id="rdv-title"><span class="nw">Écrivez-nous,</span> on répond vite.</h2>
           <p style="margin-top:18px">Rappel sous 2&#8239;h aux heures d'ouverture · annulation gratuite jusqu'à 24&#8239;h avant.</p>
           <ul class="hours-mini" id="hours-mini">
             <li data-days="2,3"><span>Mar. – mer.</span><span>9h30 – 19h</span></li>
@@ -1346,7 +1380,7 @@
           <svg class="minimap" viewBox="0 0 320 150" aria-hidden="true">
             <g stroke="#FFFFFF" stroke-opacity=".14" stroke-width="1"><path d="M0 30h320M0 60h320M0 90h320M0 120h320M40 0v150M80 0v150M120 0v150M160 0v150M200 0v150M240 0v150M280 0v150"/></g>
             <g fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity=".85"><path d="M0 104c60-8 120-6 180-24s100-30 140-30"/><path d="M96 0c4 40 10 90 26 150"/><path d="M210 0c-6 50 4 100 20 150"/><path d="M0 46h320" stroke-dasharray="4 6"/></g>
-            <g class="pin" transform="translate(150 50)"><path d="M14 40S0 26 0 14a14 14 0 0 1 28 0c0 12-14 26-14 26z" fill="#D9134F"/><rect x="7" y="8" width="14" height="10" rx="2" fill="#FFFFFF"/><path d="M8 9.5l6 4 6-4" fill="none" stroke="#D9134F" stroke-width="1.5"/></g>
+            <g transform="translate(150 50)"><g class="pin"><path d="M14 40S0 26 0 14a14 14 0 0 1 28 0c0 12-14 26-14 26z" fill="#D9134F"/><rect x="7" y="8" width="14" height="10" rx="2" fill="#FFFFFF"/><path d="M8 9.5l6 4 6-4" fill="none" stroke="#D9134F" stroke-width="1.5"/></g></g>
           </svg>
         </div>
         <div>
@@ -1371,14 +1405,15 @@
     </div>
   </footer>
 
-  <!-- Toast « Inbox zéro » -->
-  <div class="toast" id="toast" role="status" aria-live="polite">
+  <!-- Toast «&#8239;Inbox zéro&#8239;» -->
+  <div class="toast" id="toast">
     <span class="app-tile tile-cool"><svg class="ico"><use href="#i-check"/></svg></span>
     <div><p>Inbox zéro atteint. Il ne reste plus qu'à réserver.</p><a href="#rdv">Prendre RDV →</a></div>
+    <button class="toast__close" type="button" aria-label="Fermer le message"><svg class="ico"><use href="#i-x"/></svg></button>
   </div>
   <p class="visually-hidden" id="sr-live" aria-live="polite"></p>
 
-  <!-- ===================== CHATBOT « BOX » ===================== -->
+  <!-- ===================== CHATBOT «&#8239;BOX&#8239;» ===================== -->
   <div class="chat-preview" id="chat-preview"><span>Une question&#8239;? Je réponds en deux secondes.</span><button type="button" id="chat-preview-close" aria-label="Masquer"><svg class="ico"><use href="#i-x"/></svg></button></div>
   <button class="chat-launcher magnetic" id="chat-launcher" type="button" aria-expanded="false" aria-controls="chat-panel" aria-label="Discuter avec Box, l'assistant du salon">
     <span class="btn__inner"><svg class="ico i-chat"><use href="#i-chat"/></svg><svg class="ico i-close"><use href="#i-x"/></svg></span>
@@ -1425,9 +1460,18 @@
   function storageGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
   function storageSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* stockage indisponible */ } }
   function srSay(text) { var el = $("#sr-live"); el.textContent = ""; setTimeout(function () { el.textContent = text; }, 60); }
-  function scrollToId(id) {
+  if (storageGet("inbox-paused") === "1") root.classList.add("is-paused"); // état de pause appliqué avant tout le reste
+  $$("svg.ico").forEach(function (s) { s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false"); });
+  // Fait défiler jusqu'à une section ; avec focus: true, place le focus clavier sur son titre
+  function scrollToId(id, opts) {
     var el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: motionOK() ? "smooth" : "auto", block: "start" });
+    if (!el) return;
+    el.scrollIntoView({ behavior: motionOK() ? "smooth" : "auto", block: "start" });
+    if (opts && opts.focus) {
+      var h = $("h2", el) || el;
+      if (!h.hasAttribute("tabindex")) h.setAttribute("tabindex", "-1");
+      h.focus({ preventScroll: true });
+    }
   }
   // Générateur pseudo-aléatoire déterministe (les illustrations restent identiques à chaque visite)
   function rng(seed) {
@@ -1469,6 +1513,7 @@
     6: ["09:00", "11:00", "14:00", "16:00"]
   };
   var DAYS_FR = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+  var SLOT_TEXT = "Créneaux libres cette semaine";
   function parisNow() {
     var parts = {};
     try {
@@ -1502,8 +1547,10 @@
     });
     // Infobulle du bouton principal : créneaux restants aujourd'hui
     var left = (SLOTS[n.dow] || []).filter(function (s) { var p = s.split(":"); return +p[0] + p[1] / 60 > n.h + 1; }).length;
-    var tip = $("[data-slots-tip]");
-    if (tip) tip.textContent = left ? left + (left > 1 ? " créneaux libres aujourd'hui" : " créneau libre aujourd'hui") : "Créneaux libres dès " + nextOpenDayName();
+    var tip = $("[data-slots-tip]"), ctaBadge = $("#cta-badge");
+    SLOT_TEXT = left ? left + (left > 1 ? " créneaux libres aujourd'hui" : " créneau libre aujourd'hui") : "Créneaux libres dès " + nextOpenDayName();
+    if (tip) tip.textContent = SLOT_TEXT;
+    if (ctaBadge) { if (left) ctaBadge.textContent = left; else ctaBadge.hidden = true; }
     $("#year").textContent = n.y;
   })();
   function nextOpenDayName() {
@@ -1559,7 +1606,9 @@
     var colours = cwRgb(COLOURWAYS.sorbet), from = null, to = null, recolourStart = 0, baseGrad = null;
     var dpr = 1, scale = 1, ox = 0, oy = 0, cw = 0, ch = 0;
     var pointer = { x: -999, y: -999, tx: -999, ty: -999, active: false, last: -1e9, strength: 1 };
-    var visible = true, heroP = 0, lastDraw = 0, frameSkip = (isSmall() || weakDevice);
+    var visible = true, heroP = 0, lastDraw = 0, frameSkip = (isSmall() || weakDevice), frameTop = 0, frameH = 1;
+    function measureFrame() { var r = frame.getBoundingClientRect(); frameTop = r.top + window.scrollY; frameH = r.height || 1; }
+    window.addEventListener("scroll", function () { heroP = clamp((window.scrollY - frameTop) / frameH, 0, 1); }, { passive: true });
     var bubbles = [], lastBubble = 0;
 
     function buildGradients() {
@@ -1577,7 +1626,7 @@
       dpr = Math.min(window.devicePixelRatio || 1, isSmall() ? 1.5 : 2);
       canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr);
       scale = Math.max(cw / W, ch / H); ox = (cw - W * scale) / 2; oy = (ch - H * scale) / 2;
-      buildGradients(); draw(performance.now());
+      measureFrame(); buildGradients(); draw(performance.now());
     }
     function point(s, k, t, amp, out) {
       var sv = s.L * k / (K - 1), f = sv / s.L;
@@ -1725,11 +1774,12 @@
     addTask({
       isActive: function () { return (motionOK() || !!to) && visible && !document.hidden; },
       update: function (dt, now) {
-        var r = frame.getBoundingClientRect();
-        heroP = clamp(-r.top / (r.height || 1), 0, 1);
         recolourStep(now);
-        if (motionOK()) physics(dt, now);
-        if (frameSkip && now - lastDraw < 30) return;
+        // au repos (pas de pointeur depuis 3 s), la brise est dessinée à ~20 i/s pour économiser la batterie
+        var idle = now - pointer.last > 3000 && !to;
+        var minGap = idle ? 50 : (frameSkip ? 30 : 0);
+        if (now - lastDraw < minGap) return;
+        if (motionOK()) physics(Math.min((now - lastDraw) / 1000, 1 / 15), now);
         lastDraw = now; draw(motionOK() ? now : 0);
       }
     });
@@ -1913,26 +1963,37 @@
     var c = 0, iv = setInterval(function () { c++; badgeNum.textContent = c; if (c >= 3) clearInterval(iv); }, 200);
     setTimeout(function () { if (c < 3) { clearInterval(iv); badgeNum.textContent = "3"; } }, 1400);
   }
-  var toastTimer = 0;
+  var toastTimer = 0, toast = $("#toast");
+  function inView(el) { var r = el.getBoundingClientRect(); return r.top < window.innerHeight && r.bottom > 0; }
+  function hideToast() { toast.classList.remove("is-visible"); clearTimeout(toastTimer); }
   function showToast() {
-    var t = $("#toast");
+    if (bookingSent || inView($("#rdv"))) return; // jamais par-dessus le formulaire
     hidePreview();
-    t.classList.add("is-visible");
-    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove("is-visible"); }, 7000);
+    toast.classList.add("is-visible");
+    srSay("Inbox zéro atteint. Il ne reste plus qu'à réserver.");
+    clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, 7000);
   }
+  $(".toast__close", toast).addEventListener("click", hideToast);
+  $("a", toast).addEventListener("click", hideToast);
   function markRead() {
     if (unread <= 0) return;
     unread--;
     flipNumber(badgeNum, unread); bump(badge, "squash");
     if (unread === 0) {
       setTimeout(function () { badge.classList.add("is-zero"); bump(badge, "pop"); }, 340);
-      srSay("Tout est lu.");
-      if (!bookingSent) showToast();
+      setTimeout(showToast, 1200);
     }
   }
   if ("IntersectionObserver" in window) {
+    // une section compte comme « lue » après 1,2 s à l'écran (pas au simple passage d'un défilement)
+    var dwell = {};
     var seenIO = new IntersectionObserver(function (en) {
-      en.forEach(function (e) { if (e.isIntersecting) { seenIO.unobserve(e.target); markRead(); } });
+      en.forEach(function (e) {
+        var id = e.target.id;
+        if (e.isIntersecting) {
+          dwell[id] = setTimeout(function () { seenIO.unobserve(e.target); markRead(); }, 1200);
+        } else clearTimeout(dwell[id]);
+      });
     }, { threshold: .35 });
     ["prestations", "realisations", "avis"].forEach(function (id) { seenIO.observe(document.getElementById(id)); });
   }
@@ -1952,7 +2013,7 @@
       scrollTick = false;
       var max = document.documentElement.scrollHeight - window.innerHeight, p = max > 0 ? clamp(window.scrollY / max, 0, 1) : 0;
       bar.style.transform = "scaleX(" + p + ")";
-      env.style.transform = "translateX(" + (p * (header.clientWidth - 18)) + "px)";
+      env.style.transform = "translateX(" + (p * (header.clientWidth - 34)) + "px)";
       env.classList.toggle("is-done", p > .98);
       header.classList.toggle("is-scrolled", window.scrollY > 40);
     });
@@ -1986,26 +2047,33 @@
     menuBtn.setAttribute("aria-expanded", String(open));
     menuBtn.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
     document.body.classList.toggle("menu-open", open);
+    // le reste de la page devient inerte pendant que le menu est ouvert
+    [$("main"), $(".site-footer"), $(".logo"), $(".rdv-pill"), $(".cal-btn"), $("#chat-launcher")].forEach(function (el) { if (el) el.inert = open; });
     if (open) {
       sheet.hidden = false;
       requestAnimationFrame(function () { sheet.classList.add("is-open"); });
-      document.body.style.overflow = "hidden";
+      root.style.overflow = "hidden";
       setTimeout(function () { var f = $("a", sheet); if (f) f.focus({ preventScroll: true }); }, 80);
     } else {
       sheet.classList.remove("is-open");
-      document.body.style.overflow = "";
+      root.style.overflow = "";
       setTimeout(function () { if (!sheet.classList.contains("is-open")) sheet.hidden = true; }, motionOK() ? 420 : 0);
     }
   }
   menuBtn.addEventListener("click", function () { setMenu(menuBtn.getAttribute("aria-expanded") !== "true"); });
-  sheet.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
+  sheet.addEventListener("click", function (e) {
+    var a = e.target.closest("a"); if (!a) return;
+    e.preventDefault(); setMenu(false);
+    var id = a.getAttribute("href").slice(1);
+    setTimeout(function () { scrollToId(id, { focus: true }); }, 30);
+  });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && sheet.classList.contains("is-open")) { setMenu(false); menuBtn.focus(); }
-    if (e.key === "Tab" && sheet.classList.contains("is-open")) { // piège à focus simple
-      var f = $$("a, button", sheet).concat([menuBtn]);
+    if (e.key === "Tab" && sheet.classList.contains("is-open")) { // piège à focus : bouton menu + liens du menu
+      var f = [menuBtn].concat($$("a, button", sheet));
       var i = f.indexOf(document.activeElement);
       if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
-      else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      else if (!e.shiftKey && (i === f.length - 1 || i === -1)) { e.preventDefault(); f[0].focus(); }
     }
   });
 
@@ -2022,7 +2090,7 @@
   ];
   var notifIndex = 0, queued = null;
   function notifHTML(n) {
-    return '<button class="notif" type="button" data-notif="' + n.kind + '"><span class="app-tile ' + n.tile + '"><svg class="ico"><use href="#' + n.icon + '"/></svg></span>' +
+    return '<button class="notif" type="button" data-notif="' + n.kind + '"><span class="app-tile ' + n.tile + '"><svg class="ico" aria-hidden="true" focusable="false"><use href="#' + n.icon + '"/></svg></span>' +
       '<span class="notif__txt"><span class="notif__title"></span><span class="notif__body"></span></span><span class="notif__time">à l\'instant</span></button>';
   }
   function pushNotif(n) {
@@ -2061,8 +2129,8 @@
     var b = e.target.closest("[data-notif]"); if (!b) return;
     var k = b.dataset.notif;
     if (k === "slot") prefillBooking({ service: "Coupe homme", with: "Hugo", dow: 6, time: "14:00" });
-    else if (k === "review") scrollToId("avis");
-    else if (k === "gloss" || k === "care") { scrollToId("prestations"); flashRow("Gloss couleur express"); }
+    else if (k === "review") scrollToId("avis", { focus: true });
+    else if (k === "gloss" || k === "care") { scrollToId("prestations", { focus: true }); flashRow("Gloss couleur express"); }
     else if (k === "diag" || k.indexOf("colour") === 0) prefillBooking({ service: "Balayage / ombré", with: "Sarah" });
   });
   if ("IntersectionObserver" in window) {
@@ -2071,7 +2139,7 @@
 
   // Nuancier : éventail (desktop) et pastilles (mobile)
   var fan = $("#nuancier-fan"), row = $(".nuancier-row"), colourName = $("[data-colour-name]");
-  var keys = Object.keys(COLOURWAYS), rots = [-18, -6, 6, 18];
+  var keys = Object.keys(COLOURWAYS), rots = [-24, -8, 8, 24], ring = $(".nuancier__ring", fan);
   keys.forEach(function (k, i) {
     var cw = COLOURWAYS[k], g = "linear-gradient(180deg," + cw.main.join(",") + ")";
     var sw = document.createElement("button");
@@ -2079,7 +2147,7 @@
     sw.style.setProperty("--rot", rots[i] + "deg"); sw.style.setProperty("--g", g);
     sw.setAttribute("aria-label", "Essayer la couleur " + cw.name); sw.setAttribute("aria-pressed", String(i === 0));
     sw.innerHTML = "<span></span>";
-    fan.insertBefore(sw, fan.firstChild);
+    fan.insertBefore(sw, ring); // ordre du DOM = ordre visuel, de gauche à droite
     var chip = document.createElement("button");
     chip.type = "button"; chip.className = "chip-color"; chip.dataset.cw = k; chip.setAttribute("aria-pressed", String(i === 0));
     chip.style.setProperty("--g", g); chip.innerHTML = "<i aria-hidden=\"true\"></i>" + cw.name;
@@ -2091,7 +2159,15 @@
     if (hair) hair.setColourway(k);
     if (k !== "sorbet") queued = { kind: "colour-" + k, tile: "tile-warm", icon: "i-sparkle", title: "Envie de " + COLOURWAYS[k].name.toLowerCase() + " ?", body: "Diagnostic couleur offert, 15 min avec Sarah" };
   }
-  $$("[data-cw]").forEach(function (b) { b.addEventListener("click", function () { pickColour(b.dataset.cw); }); });
+  $$("[data-cw]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      pickColour(b.dataset.cw);
+      if (b.classList.contains("chip-color")) { // sur mobile, on montre les cheveux qui changent de couleur
+        var fr = $("#hero-frame").getBoundingClientRect();
+        if (fr.top < 60 || fr.bottom > window.innerHeight) $("#hero-frame").scrollIntoView({ block: "center", behavior: motionOK() ? "smooth" : "auto" });
+      }
+    });
+  });
 
   // Boutons magnétiques + profondeur du hero (pointeur fin uniquement)
   if (finePointer) {
@@ -2123,8 +2199,8 @@
      ========================================================= */
   $$("[data-odo]").forEach(function (el) {
     var txt = el.textContent;
-    el.setAttribute("aria-label", txt);
     el.innerHTML = "";
+    var sr = document.createElement("span"); sr.className = "visually-hidden"; sr.textContent = txt; el.appendChild(sr);
     txt.split("").forEach(function (ch) {
       if (/\d/.test(ch)) {
         var d = document.createElement("span"); d.className = "odo__d"; d.setAttribute("aria-hidden", "true");
@@ -2157,13 +2233,17 @@
   }
 
   var TAPE_A = ["Coupe", "Balayage", "Soin Olaplex", "Brushing", "Couleur", "Barbe", "Chignon"];
-  var TAPE_B = ["Nouveau message", "3 créneaux libres aujourd'hui", "Diagnostic couleur offert"];
+  var TAPE_B = ["Nouveau message", SLOT_TEXT, "Diagnostic couleur offert"];
   var tapes = $$("[data-tape]").map(function (tape, ti) {
     var words = ti === 0 ? TAPE_A : TAPE_B, track = $(".tape__track", tape), html = "";
-    for (var r = 0; r < 4; r++) words.forEach(function (w) { html += '<span class="tape__item">' + w + '<svg class="ico"><use href="#' + (ti === 0 ? "i-curl" : "i-env") + '"/></svg></span>'; });
+    for (var r = 0; r < 4; r++) words.forEach(function (w) { html += '<span class="tape__item">' + w + '<svg class="ico" aria-hidden="true" focusable="false"><use href="#' + (ti === 0 ? "i-curl" : "i-env") + '"/></svg></span>'; });
     track.innerHTML = html + html; // contenu doublé pour une boucle sans couture
-    return { el: tape, track: track, dir: +tape.dataset.tape, x: 0, base: ti === 0 ? 60 : 48, skew: 0, hover: false };
+    return { el: tape, track: track, dir: +tape.dataset.tape, x: 0, base: ti === 0 ? 60 : 48, skew: 0, hover: false, half: 0 };
   });
+  function measureTapes() { tapes.forEach(function (t) { t.half = t.track.scrollWidth / 2 || 1; }); }
+  measureTapes();
+  window.addEventListener("resize", measureTapes);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureTapes);
   var tapesVisible = false;
   tapes.forEach(function (t) {
     t.el.addEventListener("mouseenter", function () { t.hover = true; });
@@ -2176,7 +2256,7 @@
       var v = scrollVel, dirSign = v < -5 ? -1 : 1;
       tapes.forEach(function (t) {
         if (t.hover) return;
-        var half = t.track.scrollWidth / 2 || 1;
+        var half = t.half || 1;
         t.x -= t.dir * dirSign * (t.base + Math.min(Math.abs(v) * .6, 3 * t.base)) * dt;
         t.x = ((t.x % half) + half) % half - half;
         t.skew = lerp(t.skew, clamp(v * .004, -6, 6), .1);
@@ -2225,7 +2305,9 @@
   }
   function flashRow(name) {
     var r = $$(".row").filter(function (x) { return x.dataset.service === name; })[0];
-    if (r) { r.closest("li").hidden = false; setTimeout(function () { bump(r, "is-flash"); }, 600); }
+    if (!r) return;
+    if (r.closest("li").hidden) $('#svc-tabs .tab[data-filter="all"]').click();
+    if (motionOK()) setTimeout(function () { bump(r, "is-flash"); }, 600);
   }
 
   /* =========================================================
@@ -2241,13 +2323,13 @@
   }
   LOOKS.forEach(function (L, i) {
     var b = document.createElement("button");
-    b.type = "button"; b.className = "attach"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", String(i === 0));
+    b.type = "button"; b.className = "attach"; b.setAttribute("aria-pressed", String(i === 0));
     b.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#i-clip"/></svg><span class="attach__name"></span><span class="attach__size"></span><span class="attach__desc"></span>';
     $(".attach__name", b).textContent = L.file; $(".attach__size", b).textContent = L.size; $(".attach__desc", b).textContent = L.desc;
     b.addEventListener("click", function () {
       if (i === current) return;
       current = i;
-      $$(".attach", tablist).forEach(function (x, j) { x.setAttribute("aria-selected", String(j === i)); });
+      $$(".attach", tablist).forEach(function (x, j) { x.setAttribute("aria-pressed", String(j === i)); });
       if (!motionOK()) { renderLook(i); return; }
       stage.classList.add("is-swapping");
       setTimeout(function () {
@@ -2259,6 +2341,20 @@
   });
   renderLook(0);
   range.addEventListener("input", function () { stage.style.setProperty("--pos", range.value + "%"); });
+  (function touchDrag() { // au doigt : le séparateur ne suit qu'un glissement horizontal (le défilement vertical reste libre)
+    var start = null, engaged = false;
+    stage.addEventListener("pointerdown", function (e) { if (e.pointerType === "mouse") return; start = { x: e.clientX, y: e.clientY }; engaged = false; });
+    stage.addEventListener("pointermove", function (e) {
+      if (!start) return;
+      var dx = e.clientX - start.x, dy = e.clientY - start.y;
+      if (!engaged && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) engaged = true;
+      if (!engaged) return;
+      var r = stage.getBoundingClientRect();
+      range.value = Math.round(clamp((e.clientX - r.left) / r.width, 0, 1) * 100);
+      range.dispatchEvent(new Event("input"));
+    });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (t) { stage.addEventListener(t, function () { start = null; engaged = false; }); });
+  })();
   if ("IntersectionObserver" in window) { // indice : le curseur fait un petit aller-retour la première fois
     var hintIO = new IntersectionObserver(function (en) {
       if (!en[0].isIntersecting) return;
@@ -2378,11 +2474,27 @@
   timePills.addEventListener("change", function () { clearErr("slot"); });
 
   // Téléphone : mise en forme par paires
-  var phone = $("#f-phone");
-  phone.addEventListener("input", function () {
-    var digits = phone.value.replace(/\D/g, "").slice(0, 10);
+  var phone = $("#f-phone"), prevPhone = "";
+  phone.addEventListener("input", function (e) {
+    var v = phone.value, caret = phone.selectionStart == null ? v.length : phone.selectionStart;
+    var intl = v.match(/^\s*(?:\+|00)\s*3\s*3\s*\(?0?\)?\s*(.*)$/); // +33 6 … devient 06 …
+    if (intl) { v = "0" + intl[1]; caret = v.length; }
+    if (/^\s*(\+|00)/.test(v)) { prevPhone = v; clearErr("phone"); return; } // autre indicatif : laissé tel quel
+    var digitsBefore = v.slice(0, caret).replace(/\D/g, "").length;
+    var digits = v.replace(/\D/g, "");
+    // Retour arrière sur une espace : on efface aussi le chiffre qui la précède
+    if (e.inputType === "deleteContentBackward" && digits === prevPhone.replace(/\D/g, "") && digitsBefore > 0) {
+      digits = digits.slice(0, digitsBefore - 1) + digits.slice(digitsBefore); digitsBefore--;
+    }
+    digits = digits.slice(0, 10);
     var formatted = digits.replace(/(\d{2})(?=\d)/g, "$1 ");
-    if (formatted !== phone.value) phone.value = formatted;
+    if (formatted !== phone.value) {
+      phone.value = formatted;
+      var pos = 0, seen = 0;
+      while (pos < formatted.length && seen < digitsBefore) { if (/\d/.test(formatted[pos])) seen++; pos++; }
+      try { phone.setSelectionRange(pos, pos); } catch (err) { /* type tel sans sélection */ }
+    }
+    prevPhone = phone.value;
     clearErr("phone");
   });
   $("#f-name").addEventListener("input", function () { clearErr("name"); });
@@ -2404,19 +2516,22 @@
     if (o.service) { select.value = o.service; subject.textContent = "Rendez-vous · " + o.service; clearErr("service"); }
     if (o.with !== undefined) $$('input[name="with"]').forEach(function (r) { r.checked = r.value === o.with; });
     if (o.dow !== undefined) {
-      var d = DAYS.filter(function (x) { return x.dow === o.dow; })[0];
+      // premier jour correspondant où l'horaire proposé est encore libre
+      var d = DAYS.filter(function (x) { return x.dow === o.dow && x.slots.indexOf(o.time) !== -1; })[0] || DAYS.filter(function (x) { return x.dow === o.dow; })[0];
       if (d) { $$('input[name="day"]').forEach(function (r) { r.checked = r.value === d.iso; }); renderTimes(d.iso, d.slots.indexOf(o.time) !== -1 ? o.time : null); }
     }
     if (compose.classList.contains("is-sent")) compose.classList.remove("is-sent");
     scrollToId("rdv");
     setTimeout(function () {
-      var f = $("#field-service"); bump(f, "glow");
+      if (motionOK()) bump($("#field-service"), "glow");
       $("#f-name").focus({ preventScroll: true });
     }, motionOK() ? 700 : 0);
   }
 
+  var sending = false;
   form.addEventListener("submit", function (e) {
     e.preventDefault();
+    if (sending) return;
     var name = $("#f-name").value.trim(), tel = phone.value.trim(), svc = select.value;
     var day = $('input[name="day"]:checked'), time = $('input[name="time"]:checked');
     var firstBad = null;
@@ -2430,11 +2545,15 @@
     var withWho = ($('input[name="with"]:checked') || {}).value;
     // Ici, envoyer la demande à votre outil de réservation (fetch vers votre endpoint).
     var text = "Merci " + name.split(" ")[0] + " ! Demande envoyée pour " + d.long + " à " + time.value + " · " + svc + (withWho ? " avec " + withWho : "") +
-      ". On vous rappelle au " + tel + " sous 2 h pour confirmer.";
+      ". On vous rappelle au " + tel + " sous 2 h aux heures d'ouverture pour confirmer.";
+    sending = true; form.querySelector('[type="submit"]').disabled = true;
+    hideToast();
     sendAnimation(function () {
       $("#confirm-text").textContent = text;
       compose.classList.add("is-sent");
-      bookingSent = true;
+      bookingSent = true; sending = false; form.querySelector('[type="submit"]').disabled = false;
+      hideToast();
+      compose.scrollIntoView({ block: "start", behavior: motionOK() ? "smooth" : "auto" });
       $("#confirm-title").focus({ preventScroll: true });
       $("#confirm-receipt").classList.remove("is-read");
       setTimeout(function () { $("#confirm-receipt").classList.add("is-read"); $("#confirm-receipt").lastChild.textContent = "Envoyé · vu par Box"; }, 1200);
@@ -2451,6 +2570,7 @@
     }
     var r = compose.getBoundingClientRect();
     var sx = r.left + r.width / 2 - 60, sy = clamp(r.top + r.height / 2, 80, window.innerHeight - 80) - 40;
+    compose.removeAttribute("data-reveal"); // la révélation au défilement ne doit pas masquer le pliage
     compose.classList.add("is-folding");
     var envEl = document.createElement("div");
     envEl.className = "flying-env";
@@ -2507,26 +2627,39 @@
   var preview = $("#chat-preview"), greeted = false, opened = false;
   function nowHM() { return parisNow().hm; }
   var PHONE = "04 65 71 28 41";
+  // Prix d'une prestation précise, lu dans la liste des prestations (une seule source de vérité)
+  function plain(s) { return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+  function servicePrice(q) {
+    var best = null;
+    $$(".row[data-service]").forEach(function (r) {
+      var full = plain(r.dataset.service), key = full.split(/[ (+\/]/)[0];
+      if (q.indexOf(full) !== -1 || (key.length > 4 && q.indexOf(key) !== -1)) { if (!best || full.length > best.full.length) best = { r: r, full: full }; }
+    });
+    if (!best) return null;
+    var r = best.r;
+    return "<p>" + r.dataset.service + "&#8239;: " + $(".price-chip", r).textContent + " (" + $(".row__dur", r).textContent + "). " + $(".row__preview", r).textContent + "</p><button class=\"act\" type=\"button\" data-act=\"book-svc\" data-svc=\"" + r.dataset.service + "\">Réserver →</button>";
+  }
   var INTENTS = [
     { re: /annul|retard|decal|report/, a: function () { return "<p>Merci de nous prévenir au moins 24 h avant. Au-delà de 10 minutes de retard, on adapte la prestation pour ne pas décaler les suivantes.</p>"; } },
-    { re: /horaire|heure|ouvert|ferme|ouvre|nocturne|dimanche|lundi|samedi/, a: function () { return "<p>Nous vous accueillons du mardi au samedi&#8239;: mardi et mercredi 9h30 – 19h, jeudi 9h30 – 20h30 (nocturne), vendredi 9h30 – 19h, samedi 9h – 18h. Fermé dimanche et lundi.</p><p><strong>En ce moment&#8239;: " + openStatus().text.toLowerCase() + ".</strong></p>"; } },
+    { re: /\brdv\b|rendez|reserv|dispo|creneau|une place/, a: function () { return "<p>Le plus rapide&#8239;: remplissez le formulaire, on vous rappelle sous 2 h aux heures d'ouverture. Vous pouvez aussi appeler le " + PHONE + ".</p><button class=\"act\" type=\"button\" data-act=\"book\">Ouvrir le formulaire →</button>"; } },
+    { re: /horaire|\bheures?\b|ouvert|ferme|ouvre|nocturne|dimanche|lundi|samedi/, a: function () { return "<p>Nous vous accueillons du mardi au samedi&#8239;: mardi et mercredi 9h30 – 19h, jeudi 9h30 – 20h30 (nocturne), vendredi 9h30 – 19h, samedi 9h – 18h. Fermé dimanche et lundi.</p><p><strong>En ce moment&#8239;: " + openStatus().text.toLowerCase() + ".</strong></p>"; } },
     { re: /balayage|couleur|coloration|blond|meche|gloss|cuivr|racine/, a: function () { return "<p>Avant toute couleur, Sarah vous propose un diagnostic offert de 15 minutes. Balayage dès 120 €, racines 58 €, gloss express 35 €.</p><button class=\"act\" type=\"button\" data-act=\"book-colour\">Ouvrir le formulaire →</button>"; } },
     { re: /homme|barbe|degrade|barbier/, a: function () { return "<p>Coupe homme 28 € (30 min), taille de barbe 18 € (20 min). Hugo s'occupe des dégradés du mardi au samedi.</p><button class=\"act\" type=\"button\" data-act=\"book-hugo\">Réserver avec Hugo →</button>"; } },
-    { re: /enfant|fille|garcon|bebe/, a: function () { return "<p>Coupe enfant (moins de 12 ans)&#8239;: 18 €, 20 minutes. Avec un sticker à la sortie.</p>"; } },
+    { re: /enfant|fille|garcon|bebe|\bfils\b|\bado/, a: function () { return "<p>Coupe enfant (moins de 12 ans)&#8239;: 18 €, 20 minutes. Avec un sticker à la sortie.</p>"; } },
     { re: /mariage|chignon|evenement|soiree|ceremonie/, a: function () { return "<p>Inès signe les coiffures de mariage et de soirée (chignon 65 €, 1 h), avec un essai possible la semaine d'avant.</p>"; } },
     { re: /boucle|frise|crepu|curly|afro/, a: function () { return "<p>Inès est spécialiste des cheveux bouclés&#8239;: coupe à sec boucle par boucle et routine de définition. Dites-lui bonjour dans le formulaire&#8239;!</p>"; } },
     { re: /soin|olaplex|davines|abime|sec|casse/, a: function () { return "<p>Soin Olaplex n°1-2&#8239;: 30 € (30 min) pour reconstruire la fibre. Soin profond Davines&#8239;: 38 € (45 min) avec massage crânien.</p>"; } },
-    { re: /prix|tarif|combien|cout|cher|euro|€/, a: function () { return "<p>Quelques repères&#8239;: coupe femme + brushing 52 €, coupe homme 28 €, couleur racines 58 €, balayage dès 120 €, soin Olaplex 30 €. Shampoing et soin démêlant toujours inclus.</p><button class=\"act\" type=\"button\" data-act=\"services\">Voir toutes les prestations →</button>"; } },
-    { re: /rdv|rendez|reserv|dispo|creneau|place/, a: function () { return "<p>Le plus rapide&#8239;: remplissez le formulaire, on vous rappelle sous 2 h aux heures d'ouverture. Vous pouvez aussi appeler le " + PHONE + ".</p><button class=\"act\" type=\"button\" data-act=\"book\">Ouvrir le formulaire →</button>"; } },
-    { re: /adresse|metro|parking|acces|venir|ou etes|ou se trouve|lyon/, a: function () { return "<p>27 rue des Capucins, 69001 Lyon. Métro Hôtel de Ville – Louis Pradel (lignes A et C), parking Terreaux à 3 minutes à pied.</p>"; } },
+    { re: /prix|tarif|combien|\bcout|\bcher(e|s)?\b|euro|€/, a: function (q) { return servicePrice(q) || "<p>Quelques repères&#8239;: coupe femme + brushing 52 €, coupe homme 28 €, couleur racines 58 €, balayage dès 120 €, soin Olaplex 30 €. Shampoing et soin démêlant toujours inclus.</p><button class=\"act\" type=\"button\" data-act=\"services\">Voir toutes les prestations →</button>"; } },
+    { re: /adresse|metro|parking|garer|stationn|acces|venir|\bou\b.*\b(etes|est|trouve|situe)|\b(etes|est|trouve|situe)\b.*\bou\b|lyon/, a: function () { return "<p>27 rue des Capucins, 69001 Lyon. Métro Hôtel de Ville – Louis Pradel (lignes A et C), parking Terreaux à 3 minutes à pied.</p>"; } },
     { re: /paiement|payer|carte|cb|espece|cheque|cadeau/, a: function () { return "<p>CB, sans contact, espèces et chèques cadeaux Inbox.</p>"; } },
     { re: /produit|marque|vegan|bio/, a: function () { return "<p>On travaille avec Davines et Olaplex, des produits professionnels vegan, en vente au salon.</p>"; } },
+    { re: /coiffeu|coiffure|salon|inbox/, a: function () { return "<p>Vous êtes au bon endroit&#8239;! Inbox est un salon mixte à Lyon 1er&#8239;: coupe, couleur, soins et barbe, du mardi au samedi.</p><button class=\"act\" type=\"button\" data-act=\"services\">Voir les prestations →</button>"; } },
     { re: /bonjour|salut|hello|bonsoir|coucou/, a: function () { return "<p>Bonjour&#8239;! Que puis-je faire pour vous&#8239;?</p>"; } },
     { re: /merci|super|parfait|top/, a: function () { return "<p>Avec plaisir&#8239;! À très vite au salon.</p>"; } }
   ];
   function answer(text) {
-    var q = text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-    for (var i = 0; i < INTENTS.length; i++) if (INTENTS[i].re.test(q)) return INTENTS[i].a();
+    var q = plain(text);
+    for (var i = 0; i < INTENTS.length; i++) if (INTENTS[i].re.test(q)) return INTENTS[i].a(q);
     return "<p>Je n'ai pas encore la réponse… Appelez-nous au " + PHONE + " ou laissez un message via le formulaire.</p><button class=\"act\" type=\"button\" data-act=\"book\">Ouvrir le formulaire →</button>";
   }
   function addMsg(html, who) {
@@ -2539,7 +2672,7 @@
   }
   function botSay(html, lenHint) {
     var typing = document.createElement("div"); typing.className = "msg bot";
-    typing.innerHTML = motionOK() ? '<span class="typing" aria-label="Box écrit…"><i></i><i></i><i></i></span>' : '<div class="msg__b">Box écrit…</div>';
+    typing.innerHTML = motionOK() ? '<span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><span class="visually-hidden">Box écrit…</span>' : '<div class="msg__b">Box écrit…</div>';
     log.appendChild(typing); log.scrollTop = log.scrollHeight;
     var delay = Math.min(1100, 450 + 12 * (lenHint || 20));
     setTimeout(function () { typing.remove(); addMsg(html, "bot"); }, motionOK() ? delay : 300);
@@ -2561,14 +2694,15 @@
   }
   launcher.addEventListener("click", function () { setChat(launcher.getAttribute("aria-expanded") !== "true"); });
   $("#chat-close").addEventListener("click", function () { setChat(false); launcher.focus(); });
-  panel.addEventListener("keydown", function (e) { if (e.key === "Escape") { setChat(false); launcher.focus(); } });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && panel.classList.contains("is-open")) { setChat(false); launcher.focus(); } });
   $("#chat-chips").addEventListener("click", function (e) { var b = e.target.closest("[data-ask]"); if (b) ask(b.dataset.ask); });
   chatForm.addEventListener("submit", function (e) { e.preventDefault(); ask(chatInput.value); chatInput.value = ""; });
   log.addEventListener("click", function (e) {
     var b = e.target.closest(".act"); if (!b) return;
     var a = b.dataset.act;
-    if (window.innerWidth < 900) setChat(false);
-    if (a === "services") scrollToId("prestations");
+    setChat(false); // la discussion se ferme pour ne pas masquer la page
+    if (a === "services") scrollToId("prestations", { focus: true });
+    else if (a === "book-svc") prefillBooking({ service: b.dataset.svc });
     else if (a === "book") prefillBooking({});
     else if (a === "book-colour") prefillBooking({ service: "Balayage / ombré", with: "Sarah" });
     else if (a === "book-hugo") prefillBooking({ service: "Coupe homme", with: "Hugo" });
@@ -2578,6 +2712,7 @@
   var wiggleIv = setInterval(function () {
     if (opened || wiggles >= 3) { clearInterval(wiggleIv); return; }
     if (!motionOK()) return;
+    if (launcher.classList.contains("is-away")) return;
     wiggles++; bump(launcher, "wiggle");
   }, 12000);
   function hidePreview() { preview.classList.remove("is-visible"); }
@@ -2591,6 +2726,7 @@
   }, 6000);
   // Sur mobile, le bouton s'écarte quand le formulaire est à l'écran
   if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (en) { if (en[0].isIntersecting) hideToast(); }).observe($("#rdv"));
     new IntersectionObserver(function (en) {
       launcher.classList.toggle("is-away", en[0].isIntersecting && window.innerWidth < 640 && !panel.classList.contains("is-open"));
     }, { threshold: .3 }).observe(compose);
